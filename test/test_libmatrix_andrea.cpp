@@ -12,6 +12,18 @@ using namespace libmatrix;
 
 using uint = unsigned int;
 
+int test_operator_mult_affect()
+{
+    Vec3i u {2,2,3};
+    Vec3i v {6,6,9};
+    int scalar = 3;
+    TestVector test_vec
+    {
+        { "u*=scalar == v", (u*=scalar)== v},
+    };
+    return run_tests( "Vector*=(scalar)", test_vec );
+}
+
 int test_is_ortho_Vector()
 {
    Vec3i u {1,0,0};
@@ -97,9 +109,10 @@ int test_operator_mult_Matrix()
 
 int main()
 {
-    int nb_test = 6;
+    int nb_test = 7;
     int failures { 0 };
 
+    failures += test_operator_mult_affect();
     failures += test_is_ortho_Vector();
     failures += test_to_unit();
     failures += test_inverse();

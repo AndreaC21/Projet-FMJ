@@ -230,6 +230,12 @@ float Vector<T,N>::operator *(const Vector& v)
   return result;
 }
 template<typename T,int N>
+Vector<T,N> Vector<T,N>::operator*=(const float scalar)
+{
+  *this = *this * scalar;
+  return *this;
+}
+template<typename T,int N>
 bool Vector<T,N>::operator==(const Vector& v)
 {
   for (int i=0; i<N ; ++i)
@@ -504,6 +510,18 @@ Matrix<T,N,M> Matrix<T,N,M>::operator *(const float scalar)
     }
   }
   return result;
+}
+template<typename T,int N,int M>
+Matrix<T,N,M> Matrix<T,N,M>::operator*=(const Matrix& m)
+{
+  *this = *this*m;
+  return *this;
+}
+template<typename T,int N,int M>
+Matrix<T,N,M> Matrix<T,N,M>::operator*=(const float scalar)
+{
+  *this = *this*scalar;
+  return *this;
 }
 
 template<typename T,int N,int M>

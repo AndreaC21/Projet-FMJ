@@ -10,7 +10,6 @@
 using namespace std;
 
 namespace libmatrix {
-//class Matrix;
 template<typename T,int N>
 class Vector {
   private :
@@ -28,7 +27,7 @@ class Vector {
         bool is_null();
         bool is_unit();
         float norm();
-        Vector to_unit(); // to modify with isfloatingpoint
+        Vector to_unit(); 
 
         T& operator[] (int i); //permettre de mofifier la valeur
         Vector operator+(const Vector& v);
@@ -36,18 +35,22 @@ class Vector {
         Vector operator-(); // inverse
         Vector operator *(const float scalar);
         float operator *(const Vector& v);
-        
+
+        Vector operator*=(const float scalar);
+       
         Vector& operator+= (const Vector& v);
         Vector& operator-= (const Vector& v);
         
         void operator=(const Vector& v);
-
         bool operator==(const Vector& v);
 
-        //TODO
-        //Vector operator *(const Matrix m);
-        //friend Vector operator *(const Matrix& m,const Vector& v,);
-        
+        /*
+        Vector operator*(const Matrix& m); 
+        friend Vector operator*(const Matrix& m,const Vector &v)
+        ----> Done in class Matrix
+        friend Vector<T,N> operator *(const Vector<T,M>& v, Matrix m);
+        */
+       
        friend Vector operator*(const float scalar,const Vector &v)
         {
                // return v*scalar;
@@ -71,12 +74,7 @@ class Vector {
    
 
 };
-/*a b c
-d e f
-g h i
-det(M) = (a*e*i) + (b*f*g) + (c*d*h) - (c*e*g) - (b*d*i) - (a*f*h)
-https://codereview.stackexchange.com/questions/149669/c-operator-overloading-for-matrix-operations-follow-up
-*/
+
 template<typename T,int N,int M>
 class Matrix {
       private :
@@ -102,6 +100,8 @@ class Matrix {
         Vector<T,N> operator *(const Vector<T,M>& v);
         Matrix operator *(const Matrix& m);
         Matrix operator *(const float scalar);
+        Matrix operator*=(const Matrix& m);
+        Matrix operator*=(const float scalar);
         
         bool operator ==(const Matrix m);
         
