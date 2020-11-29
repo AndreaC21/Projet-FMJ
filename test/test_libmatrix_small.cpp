@@ -331,6 +331,7 @@ int main()
     else
     {
         std::cout << "Success!" << std::endl;
+        std::cout << (nb_test-failures) <<"/"<< nb_test << std::endl;
         return 0;
     }
 }

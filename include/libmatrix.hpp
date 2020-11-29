@@ -18,28 +18,29 @@ class Vector {
       T* sequence;
   public:
         Vector();
+        Vector( const Vector& v);
         Vector(std::initializer_list<T> l);
         ~Vector();
 
         T at(int i) const ;
-        Vector cross(Vector v);
-        bool is_ortho(Vector v);
+        Vector cross(Vector& v);
+        bool is_ortho(Vector &v);
         bool is_null();
         bool is_unit();
         float norm();
         Vector to_unit(); // to modify with isfloatingpoint
 
         T& operator[] (int i); //permettre de mofifier la valeur
-        Vector operator+(const Vector v);
-        Vector operator-(const Vector v);
+        Vector operator+(const Vector& v);
+        Vector operator-(const Vector& v);
         Vector operator-(); // inverse
         Vector operator *(const float scalar);
-        float operator *(const Vector v);
+        float operator *(const Vector& v);
         
-        Vector& operator+= (const Vector v);
-        Vector& operator-= (const Vector v);
+        Vector& operator+= (const Vector& v);
+        Vector& operator-= (const Vector& v);
         
-        void operator=(const Vector v);
+        void operator=(const Vector& v);
 
         bool operator==(const Vector& v);
 
@@ -129,7 +130,13 @@ class Matrix {
                 return m*v;
         }
 };
-bool almost_equals( float a, float b)
+bool almost_equals(float a, float b)
+{
+        float precision = 1000;      
+        return (roundf(a * precision) / precision) == (roundf(b * precision) / precision);
+
+}
+bool almost_equals(int a, int b)
 {
         return a==b;
 }
@@ -160,9 +167,9 @@ Vector<T,N> cross(Vector<T,N> u,Vector<T,N> v)
 using Vec2i = Vector<int,2>;
 using Vec3i = Vector<int,3>;
 using Vec4i = Vector<int,4>;
-using Vec2r = Vector<double,2>;
-using Vec3r = Vector<double,3>;
-using Vec4r = Vector<double,4>;
+using Vec2r = Vector<float,2>;
+using Vec3r = Vector<float,3>;
+using Vec4r = Vector<float,4>;
 
 using Mat33r = Matrix<float,3,3>;
 using Mat44r = Matrix<float,4,4>;

@@ -1,26 +1,35 @@
 //#include <iostream>
 #include "../include/libmatrix.hpp"
+#include <vector>
 
 using namespace libmatrix;
 using namespace std;
 
 int main()
 {
-    Vec4r a { 1.0f, 3.5f, 1.2f, 4.4f };
-    Vec4r b { 1.0f, 2.0f, 3.0f, 4.0f };
-    Vec4r c { 0.0f, 1.5f, -1.8f, 0.4f };
+    
+    //Mat33r m;
 
-    cout << a-b << c <<endl;
-    cout << boolalpha << ((a-b)==c) << endl;
- //Vec3i v;
- //Vec3i u = Vec3i({1,3,4});
- 
- //v[0] = 2; v[1] = 7; v[2] = -5;
+    std::vector<Vec3r> v
+    {
+        { 0, 0, 1 },
+        { 0.5f, 0.5f, 0.5f },
+        { 0.5f * static_cast<float>( sqrt(2.0f) ), 0.5f * static_cast<float>( -sqrt(2.0f) ), 1.0f }
+    };
 
+    v[0][1] = 3;
+
+   /* TestVector test_vec
+    {
+        {"v[0][1] == 3", v[0][1] == 3},
+        {"v[1][2] == 7", v[1][2] == 7},
+        {"v[2][0] == 8", v[2][0] == 8},
+    };
+    */
 /*
- Vector<int,3> r = u.cross(v);
- std::cout << r.at(0) << std::endl;
-
+ Vec3i v;
+ Vec3i u;
+ 
  u[0] = 1; u[1] = 0; u[2] = 0;
  v[0] = 0; v[1] = 1; v[2] = 0;
 
@@ -61,20 +70,24 @@ std::cout << "u=-2*u-> u=" << u << std::endl;
 std::cout << "Probleme : destructor call twice " << std::endl;
 
 std::cout << u << std::endl;
+
+
 // MATRIX
 
 Mat33r m = Mat33r({{2,3,8},{6,0,-3},{-1,3,2}});
+Mat33r r {
+    {(float)1/15,(float)2/15,(float)-1/15},
+    {(float)-1/15,(float)4/45,(float)2/5},
+    {(float)2/15,(float)-1/15,(float)-2/15}
+    };
 
-/*
-m[0][0]= 1;
-m[0][1] = 5;
-m[0][2] = 9;
-
-
-std::cout <<"m:\n" <<m << std::endl;
+std::cout <<"m.inverse()==r: " <<boolalpha << (m.inverse() ==r)<< std::endl;
+std::cout <<"r:\n" <<r << std::endl;
 
 std::cout << "m inverse :\n"<<m.inverse() << std::endl;
+
 std::cout << "m transpose :\n"<<m.transpose() << std::endl;
+
 
 Mat33r m2 = Mat33r({{0,0,1},{1,0,0},{0,1,0}});
 //Mat33r m2 = Mat33r({{5,1,2},{1,5,-2},{2,-2,2}});
@@ -96,8 +109,9 @@ std::cout <<"m5+=m6"<< std::endl;
 m5+=m6;
 std::cout <<"m5:\n" <<m5 <<endl;
 
-Matrix<int,2,3> m7 = *new Matrix<int,2,3>({{1,-1,2},{0,-3,1}});
-Vect3i v1 = Vect3i({2,1,0});
+Mat33i m7 {{1,-1,2},{0,-3,1},{1,-2,4}};
+Vec3i v1{2,1,-1};
+Vec3i v2{-1,-4,-4};
 std::cout <<"m7:\n" <<m7 << std::endl;
 std::cout <<"v1:\n" <<v1<< std::endl;
 std::cout <<"m7*v1\n" <<m7*v1<< std::endl;
@@ -105,6 +119,7 @@ std::cout <<"m7*v1\n" <<m7*v1<< std::endl;
 std::cout <<"m5:\n" <<m5<< std::endl;
 std::cout <<"m5*2\n" <<m5*2<< std::endl;
 std::cout <<"2*m5\n" <<2*m5<< std::endl;
+
 */
 cout << "finished" << endl;
 return 0;
