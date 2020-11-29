@@ -11,6 +11,10 @@ Vector<T,N>::Vector()
   //cout << "default constructor "<< endl;
   size = N;
   sequence = new T[N];
+  for ( int i =0 ; i < N ; ++i)
+  {
+    sequence[i] = 0;
+  }
 
 }
 template<typename T,int N>
@@ -120,17 +124,26 @@ bool Vector<T,N>::is_unit()
   // if magnitude == 1, vector is is_unit
   return norm()==1 ;
 }
-
+//bool isofloatingpoint  type_track
 template<typename T,int N>
 Vector<T,N> Vector<T,N>::to_unit()
 {
   Vector<T,N> result;
-  int magnitude = norm();
-
-  result[0] = result.at(0) / magnitude;
-  result[1] = result.at(1) / magnitude;
-  result[2] = result.at(2) / magnitude;
-
+  try 
+  {
+    if ( !std::is_floating_point<T>::value ) throw std::string("type is not float");
+    else
+    {
+      int magnitude = norm();
+      result[0] = this->at(0) / magnitude;
+      result[1] = this->at(1) / magnitude;
+      result[2] = this->at(2) / magnitude;
+    }
+  }
+  catch(std::string const& chaine)
+  {
+      std::cerr << chaine << std::endl;
+  }
   return result;
 }
 
@@ -520,4 +533,3 @@ Matrix<T,N,M> Matrix<T,N,M>::operator+=(const Matrix& m)
 }
 #pragma endregion
 
-//bool isofloatingpoint  type_track

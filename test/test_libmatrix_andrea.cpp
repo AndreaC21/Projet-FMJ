@@ -26,6 +26,19 @@ int test_is_ortho_Vector()
 
     return run_tests( "Vector.is_ortho()", test_vec );
 }
+int test_to_unit()
+{
+    Vec3i u { 1,5,2};
+    Vec3r v {3,4,1};
+    Vec3r r{0.6,0.8,0.2};
+    TestVector test_vec
+    {
+        { "v.to_unit()=", v.to_unit()==r},
+        { "u.to_unit()=", u.to_unit()==vect3izero},
+    };
+
+    return run_tests( "Vector.to_unit()", test_vec );
+}
 int test_inverse()
 {
 
@@ -84,10 +97,11 @@ int test_operator_mult_Matrix()
 
 int main()
 {
-    int nb_test = 5;
+    int nb_test = 6;
     int failures { 0 };
 
     failures += test_is_ortho_Vector();
+    failures += test_to_unit();
     failures += test_inverse();
     failures += test_transpose();
     failures += test_is_ortho_Matrix();

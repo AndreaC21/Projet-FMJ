@@ -8,48 +8,22 @@ using namespace std;
 int main()
 {
     
-    //Mat33r m;
 
-    std::vector<Vec3r> v
-    {
-        { 0, 0, 1 },
-        { 0.5f, 0.5f, 0.5f },
-        { 0.5f * static_cast<float>( sqrt(2.0f) ), 0.5f * static_cast<float>( -sqrt(2.0f) ), 1.0f }
-    };
-
-    v[0][1] = 3;
-
-   /* TestVector test_vec
-    {
-        {"v[0][1] == 3", v[0][1] == 3},
-        {"v[1][2] == 7", v[1][2] == 7},
-        {"v[2][0] == 8", v[2][0] == 8},
-    };
-    */
-/*
  Vec3i v;
  Vec3i u;
- 
- u[0] = 1; u[1] = 0; u[2] = 0;
- v[0] = 0; v[1] = 1; v[2] = 0;
-
-std::cout << "\nu= "<< u << "v= "<< v << std::endl;
-std::cout << "u.is_ortho(v)=" << std::boolalpha <<u.is_ortho(v) << std::endl;
-
-u[0] = 4; u[1] = 2; u[2] = 3;
-v[0] = 1; v[1] = 1; v[2] = 0;
-
-std::cout << "\nu= "<< u << "v= "<< v << std::endl;
-std::cout << "u.is_ortho(v)=" << std::boolalpha <<u.is_ortho(v) << std::endl;
+ Vec3r w {3,4,1};
 
 u[0] = 1; u[1] = 0; u[2] = 0;
 v[0] = 1; v[1] = 5; v[2] = 0;
-std::cout << "\nu= "<< u << "v= "<< v<< std::endl;
+std::cout << "\nu= "<< u << "v= "<< v<< "w="<< w<< std::endl;
 std::cout << "u.norm() ="<<u.norm() << " u.is_unit()=" << std::boolalpha <<u.is_unit() << std::endl;
 std::cout << "v.norm() ="<<v.norm() << " v.is_unit()=" << std::boolalpha <<v.is_unit() << std::endl;
-v.to_unit();
-std::cout << "v.to_unit() "<< "v= "<< v<< std::endl;
 
+//std::cout << "v.to_unit() ="<< v.to_unit()<< std::endl;
+//std::cout << "u.to_unit() ="<< u.to_unit()<< std::endl;
+Vec3r w1= w.to_unit();
+std::cout << "w.to_unit() = w1 ="<< w1 << std::endl;
+/*
 
 u[0] = 1; u[1] = 2; u[2] = 3;
 v[0] = 4; v[1] = 5; v[2] = 6;
