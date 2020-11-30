@@ -1,58 +1,35 @@
 //#include <iostream>
 #include "../include/libmatrix.hpp"
+#include "../include/libgeometry.hpp"
 #include <vector>
 
 using namespace libmatrix;
+using namespace libgeometry;
 using namespace std;
 
 int main()
 {
+    Quaternion<float> q (4,1,2,3);
+    cout << q << endl;
+    cout << q[0] << endl;
+    cout << q.conjugate() << endl;
+    cout << q.norm() << endl;
+    cout << "re: " << q.re() << " im: " << q.im()<< endl;
+    cout << q.inverse() << endl;
 
-/*
+    Quaternion<float> q1 (4,1,2,3);
+    Quaternion<float> q2 (4,9,2,-3);
+    cout << q1 << "\n" << q2 << endl;
+    cout << "q==q1 " << boolalpha << (q==q1) << endl;
+    cout << "q==q2 " << boolalpha << (q==q2) << endl;
+    cout << "q1!=q2 " << boolalpha << (q1!=q2) << endl;
 
-u[0] = 1; u[1] = 2; u[2] = 3;
-v[0] = 4; v[1] = 5; v[2] = 6;
-std::cout << "\nu= "<< u << "v= "<< v << std::endl;
-u+=v;
-std::cout << "u+=v -> u=" << u<< std::endl;
-u-=v;
-std::cout << "u-=v -> u=" << u << std::endl;
-u=-u;
-std::cout << "u=-u -> u=" << u << std::endl;
-u=u+v;
-std::cout << "u=u+v-> u=" << u << std::endl;
-u=u*2;
-std::cout << "u=u*2-> u=" << u << std::endl;
-u=-2*u;
-std::cout << "u=-2*u-> u=" << u << std::endl;
+    Quaternion<float> q3 (4,1,2,3);
+    Quaternion<float> q4 (4,1,2,3);
+    cout << "q3 " <<q3 << endl;
+    cout << "\nq3*=q4 " << (q3*=q4) << endl;
+    cout << "q3*=2 " << (q3*=2) << endl;
 
-// MATRIX
-
-Matrix<int,2,2> m3 = *new Matrix<int,2,2>({{1,2},{3,4}});
-Matrix<int,2,2> m4 = *new Matrix<int,2,2>({{5,6},{7,8}});
-std::cout <<"m3:\n" <<m3 << "m4:\n" << m4 << std::endl;
-std::cout <<"m3*m4\n" <<m3*m4<< std::endl;
-
-Mat33r m5 = Mat33r({{1,3,4},{1,0,2},{1,2,1}});
-Mat33r m6 = Mat33r({{0,0,0,},{7,5,1},{2,1,3}});
-std::cout <<"m5:\n" <<m5 << "m6:\n" << m6 << std::endl;
-std::cout <<"m5+m6\n" <<m5+m6<< std::endl;
-std::cout <<"m5+=m6"<< std::endl;
-m5+=m6;
-std::cout <<"m5:\n" <<m5 <<endl;
-
-Mat33i m7 {{1,-1,2},{0,-3,1},{1,-2,4}};
-Vec3i v1{2,1,-1};
-Vec3i v2{-1,-4,-4};
-std::cout <<"m7:\n" <<m7 << std::endl;
-std::cout <<"v1:\n" <<v1<< std::endl;
-std::cout <<"m7*v1\n" <<m7*v1<< std::endl;
-
-std::cout <<"m5:\n" <<m5<< std::endl;
-std::cout <<"m5*2\n" <<m5*2<< std::endl;
-std::cout <<"2*m5\n" <<2*m5<< std::endl;
-
-*/
 cout << "finished" << endl;
 return 0;
 }
