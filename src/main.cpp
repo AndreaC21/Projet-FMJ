@@ -27,8 +27,17 @@ int main()
     Quaternion<float> q3 (4,1,2,3);
     Quaternion<float> q4 (4,1,2,3);
     cout << "q3 " <<q3 << endl;
+    cout << "q3+2 " << q3+2 << endl;
+    cout << "2+q3 " << 2+q3 << endl;
+    q3+=2;
+    cout << "q3+=2 " << q3 << endl;
+    cout << "q3*2 " << q3*2 << endl;
+    cout << "2*q3 " << 2*q3 << endl;
+    cout << "q3*q4 " << q3*q4 << endl;
     cout << "\nq3*=q4 " << (q3*=q4) << endl;
     cout << "q3*=2 " << (q3*=2) << endl;
+
+    cout << "q3.unit_quad() " << (q3.unit_quat()) << endl;
 
 cout << "finished" << endl;
 return 0;

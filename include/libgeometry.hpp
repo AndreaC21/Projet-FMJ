@@ -31,34 +31,46 @@ class Quaternion
     T re();
     Quaternion inverse() const;
     std::string to_string() const;
+    Quaternion unit_quat()const;
     T& operator[]( size_t i );
     T operator[]( size_t i ) const;
     bool operator==( const Quaternion & ) const;
     bool operator!=( const Quaternion & ) const;
+    Quaternion operator+( const T & );
     Quaternion & operator+=( const T & );
     Quaternion & operator+=( const Quaternion& );
+    Quaternion operator*(const T & );
+    Quaternion operator*(const Quaternion& );
     Quaternion & operator*=( const T& );
     Quaternion & operator*=( const Quaternion& );
     /*Quaternion operator-() const;
     
+    //Quaternion<T> operator+( const Quaternion<T> &, const Quaternion<T> & );
     
-    Quaternion operator+( const Quaternion &, const T & );
-    Quaternion operator+( const T &, const Quaternion & );
-    Quaternion<T> operator+( const Quaternion<T> &, const Quaternion<T> & );
-    Quaternion operator*( const Quaternion<T> &, const T & );
-    Quaternion operator*( const T &, const Quaternion<T> & );
-    Quaternion operator*( const Quaternion<T> &, const Quaternion<T> & );
-    std::istream operator>>( std::istream & , const Quaternion<T> & );
-    Quaternion unit_quat( const Quaternion<T> & );
+    
     Quaternion deg_to_quat( const T & x, const T & y, const T & z);
     Matrix<T, 4, 4> rotation_matrix( const Quaternion<T> & );
     */
 
+   friend Quaternion operator*( const T& scalar, Quaternion& q )
+   {
+        return q*scalar;
+   }
+   friend Quaternion operator+( const T& scalar ,Quaternion& q )
+   {
+        return q+scalar;
+   }
    friend std::ostream &operator<<(std::ostream &os, const Quaternion& q) 
-        {
-                os << q.to_string() << std::endl;
-                return os;
-        }
+   {
+        os << q.to_string() << std::endl;
+        return os;
+   }
+   friend std::istream operator>>( std::istream &is , const Quaternion<T> & )
+   {
+        float w,x,y,z;
+        is >> w >> x >> y >> z;
+        return is;
+   }
 
 };
 

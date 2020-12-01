@@ -69,6 +69,7 @@ float Quaternion<T>::norm() const
     }
     return result;
 }
+// return |Q|
 template<typename T>
 T Quaternion<T>::squared_norm() const
 {
@@ -108,6 +109,17 @@ Quaternion<T> Quaternion<T>::inverse() const
     return result;
 }
 template<typename T>
+Quaternion<T> Quaternion<T>::unit_quat()const
+{
+    Quaternion result;
+    float sn = squared_norm();
+    for (int i=0 ; i < 4 ; ++i)
+    {
+        result[i] = this[0][i] / sn;
+    }
+    return result;
+}
+template<typename T>
 bool Quaternion<T>::operator==( const Quaternion& q ) const
 {
     for (int i=0; i<4 ; ++i)
@@ -120,6 +132,16 @@ template<typename T>
 bool Quaternion<T>::operator!=( const Quaternion& q ) const
 {
     return !(*this==q);
+}
+template<typename T>
+Quaternion<T> Quaternion<T>::operator+( const T & scalar)
+{
+    Quaternion<T> result;
+    for (int i=0; i<4 ; ++i)
+    {
+        result[i] = this[0][i] + scalar;
+    }
+    return result;
 }
 template<typename T>
 Quaternion<T>& Quaternion<T>::operator+=( const T& scalar )
@@ -138,6 +160,30 @@ Quaternion<T>& Quaternion<T>::operator+=( const Quaternion& q )
         this[0][i]+= q[i];
     }
     return *this;
+}
+template<typename T>
+Quaternion<T> Quaternion<T>::operator*(const T& scalar )
+{
+    Quaternion<T> result;
+    for (int i=0; i<4 ; ++i)
+    {
+        result[i] = this[0][i] * scalar;
+    }
+    return result;
+}
+
+template<typename T>
+Quaternion<T> Quaternion<T>::operator*(const Quaternion& q)
+{
+    Quaternion<T> result;
+    Quaternion<T> copie(*this);
+    
+    result[0] = copie[0]*q[0] - copie[1] * q[1] - copie[2] * q[2] - copie[3] * q[3];
+    result[1] = copie[0]*q[1] + copie[1] * q[0] + copie[2] * q[3] - copie[3] * q[2];
+    result[2] = copie[0]*q[2] - copie[1] * q[3] + copie[2] * q[0] + copie[3] * q[1];
+    result[3] = copie[0]*q[3] + copie[1] * q[2] - copie[2] * q[1] + copie[3] * q[0];
+
+    return result;
 }
 template<typename T>
 Quaternion<T>& Quaternion<T>::operator*=( const T&  scalar)
