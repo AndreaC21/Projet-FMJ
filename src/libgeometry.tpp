@@ -2,6 +2,7 @@ using namespace libgeometry;
 
 #pragma region Quaternion
 
+
 template<typename T>
 Quaternion<T>::Quaternion()
 {
@@ -120,6 +121,37 @@ Quaternion<T> Quaternion<T>::unit_quat()const
     return result;
 }
 template<typename T>
+Quaternion<T> Quaternion<T>::deg_to_quat( const T & x, const T & y, const T & z)
+{
+    if( x > 360 || x < -360 ) x = x%360;
+    if( y > 360 || y <-360  ) y = y%360;
+    if( z > 360 || z < -360 ) z = z%360;
+
+    Quaternion result;
+    return result;
+
+}
+// https://www.andre-gaschler.com/rotationconverter/
+template<typename T>
+Matrix<T,3,3> Quaternion<T>::rotation_matrix()
+{
+    Quaternion copie(this->unit_quat());
+    Matrix<T,3,3> result;
+
+    result[0][0] =  1 - 2* pow(copie[2],2) - 2*pow(copie[3],2);
+    result[0][1] =  2*copie[1]*copie[2] - 2*copie[3]*copie[0];
+    result[0][2] =  2*copie[1]*copie[3] + 2*copie[2]*copie[0];
+    result[1][0] =  2*copie[1]*copie[2] + 2*copie[3]*copie[0];
+    result[1][1] =  1 - 2* pow(copie[1],2) - 2*pow(copie[3],2);
+    result[1][2] =  2*copie[1]*copie[3] - 2*copie[2]*copie[0];
+    result[2][0] =  2*copie[1]*copie[3] - 2*copie[2]*copie[0];
+    result[1][2] =  2*copie[1]*copie[3] + 2*copie[2]*copie[0];
+    result[2][2] =  1 - 2* pow(copie[1],2) - 2*pow(copie[2],2);
+    
+    return result;
+}
+
+template<typename T>
 bool Quaternion<T>::operator==( const Quaternion& q ) const
 {
     for (int i=0; i<4 ; ++i)
@@ -208,3 +240,218 @@ Quaternion<T>& Quaternion<T>::operator*=( const Quaternion& q )
     return *this;
 }
 # pragma endregion
+#pragma region Point
+template <typename T, int N>
+Point<T,N>::Point()
+{
+    sequence = new T[N];
+    for ( int i=0 ; i<N ; ++i)
+    {
+        sequence[i] = 0;
+    }
+}
+template <typename T, int N>
+Point<T,N>::Point(const Vector<T,N>& v)
+{
+    sequence = new T[N];
+    for ( int i=0 ; i<N ; ++i)
+    {
+        sequence[i] = v.at(i);
+    }
+}
+template <typename T, int N>
+Point<T,N>::Point(const Point& p)
+{
+    sequence = new T[N];
+    for ( int i=0 ; i<N ; ++i)
+    {
+        sequence[i] = p.at(i);
+    }
+}
+template <typename T, int N>
+Point<T,N>::~Point()
+{
+    delete [] sequence ;
+}
+template <typename T, int N>
+T Point<T,N>::at(int i) const
+{
+    return sequence[i];
+}
+template <typename T, int N>
+T Point<T,N>::w() const
+{
+    return sequence[0];
+}
+template <typename T, int N>
+T Point<T,N>::x() const
+{
+    return sequence[1];
+}
+template <typename T, int N>
+T Point<T,N>::y() const
+{
+    return sequence[2];
+}
+template <typename T, int N>
+T Point<T,N>::z() const
+{
+    return sequence[3];
+}
+template <typename T, int N>
+T& Point<T,N>::operator[] ( int i)
+{
+    return sequence[i];
+}
+template <typename T, int N>
+Point<T,N> Point<T,N>::operator +( const Point& p)
+{
+    Point<T,N> result;
+    for ( int i =0 ; i < N ; ++i)
+    {
+        result[i] = this->at(i) + p.at(i);
+    }
+    return result;
+}
+template <typename T, int N>
+Point<T,N> Point<T,N>::operator-(const Point& p)
+{
+    Point<T,N> result;
+    for ( int i =0 ; i < N ; ++i)
+    {
+        result[i] = this->at(i) - p.at(i);
+    }
+    return result;
+}
+template <typename T, int N>
+Point<T,N> Point<T,N>::operator-() const
+{
+    Point<T,N> result;
+    for ( int i =0 ; i < N ; ++i)
+    {
+        result[i] =  -this->at(i);
+    }
+    return result;
+}
+template <typename T, int N>
+Point<T,N>& Point<T,N>::operator +=( const Point&p)
+{
+    for ( int i =0 ; i < N ; ++i)
+    {
+        this[0][i] = this->at(i) + p.at(i);
+    }
+    return *this;
+}
+template <typename T, int N>
+bool Point<T,N>::operator==( const Point & p) const
+{
+    for ( int i =0 ; i < N ; ++i)
+    {
+        if ( this->at(i) != p.at(i) ) return false;
+    }
+    return true;
+}
+template <typename T, int N>
+bool Point<T,N>::operator!=( const Point& p) const
+{
+    return !(*this==p);
+}
+
+#pragma endregion
+
+#pragma region Direction
+
+template <typename T, int N>
+Direction<T,N>::Direction()
+{
+    sequence = new T[N];
+    for ( int i=0 ; i<N ; ++i)
+    {
+        sequence[i] = 0;
+    }
+}
+template <typename T, int N>
+Direction<T,N>::Direction(const Vector<T,N>& v)
+{
+    sequence = new T[N];
+    for ( int i=0 ; i<N ; ++i)
+    {
+        sequence[i] = v.at(i);
+    }
+}
+template <typename T, int N>
+Direction<T,N>::Direction(const Direction& p)
+{
+    sequence = new T[N];
+    for ( int i=0 ; i<N ; ++i)
+    {
+        sequence[i] = p.at(i);
+    }
+}
+template <typename T, int N>
+Direction<T,N>::~Direction()
+{
+    delete [] sequence ;
+}
+template <typename T, int N>
+T Direction<T,N>::at(int i) const
+{
+    return sequence[i];
+}
+template <typename T, int N>
+T Direction<T,N>::w() const
+{
+    return sequence[0];
+}
+template <typename T, int N>
+T Direction<T,N>::x() const
+{
+    return sequence[1];
+}
+template <typename T, int N>
+T Direction<T,N>::y() const
+{
+    return sequence[2];
+}
+template <typename T, int N>
+T Direction<T,N>::z() const
+{
+    return sequence[3];
+}
+template <typename T, int N>
+T& Direction<T,N>::operator[] ( int i)
+{
+    return sequence[i];
+}
+template <typename T, int N>
+Point<T, N> Direction<T,N>::operator+( const Point<T, N> &)
+{ 
+ return Point<T,N>();
+}
+/*
+template <typename T, int N>
+Quaternion<T> Direction<T,N>::operator*( const Quaternion<T> & q)
+{
+
+}
+template <typename T, int N>
+bool Direction<T,N>::operator==( const Direction<T, N> & ) const
+{
+
+}
+*/
+template <typename T, int N>
+bool Direction<T,N>::operator==( const Direction<T, N> & d) const
+{
+    for  (int i=0 ; i < N ; ++i)
+    {
+        if (this->at(i) != d.at(i) ) return false;
+    }
+    return true;
+}
+template <typename T, int N>
+bool Direction<T,N>::operator!=( const Direction<T, N> & d) const
+{
+    return !(*this==d);
+}
+#pragma endregion

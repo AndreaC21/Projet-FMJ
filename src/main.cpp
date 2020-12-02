@@ -9,6 +9,7 @@ using namespace std;
 
 int main()
 {
+    /*
     Quaternion<float> q (4,1,2,3);
     cout << q << endl;
     cout << q[0] << endl;
@@ -39,6 +40,19 @@ int main()
 
     cout << "q3.unit_quad() " << (q3.unit_quat()) << endl;
 
+    Quaternion<float> q5(1,4,5,3);
+    cout << q5 << endl;
+    cout << q5.rotation_matrix() << endl;
+
+    */
+
+   Point<float,4> p(Vec4r{1,4,5,2});
+   Point<float,4> p2(Vec4r{0,1,-3,2});
+   cout << p << p2 << endl;
+   cout << "-p : "<< -p << endl;
+   cout << "p!=p2 : " << std::boolalpha << (p!=p2) << endl;
+    p+= p2;
+    cout << "p+=p2 " << p << endl;
 cout << "finished" << endl;
 return 0;
 }
