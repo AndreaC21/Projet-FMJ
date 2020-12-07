@@ -262,6 +262,7 @@ Point<T,N>::Point(const Vector<T,N>& v)
 template <typename T, int N>
 Point<T,N>::Point(const Point& p)
 {
+    //cout << "Constructeur copie Point" << endl;
     sequence = new T[N];
     for ( int i=0 ; i<N ; ++i)
     {
@@ -271,6 +272,7 @@ Point<T,N>::Point(const Point& p)
 template <typename T, int N>
 Point<T,N>::~Point()
 {
+    //cout << "Destructeur point:" << *this << endl;
     delete [] sequence ;
 }
 template <typename T, int N>
@@ -299,6 +301,18 @@ T Point<T,N>::z() const
     return sequence[3];
 }
 template <typename T, int N>
+bool Point<T,N>::is_outside( const Sphere& s ) const
+{
+  //( inside (px-cx)² + (py-cy)² + (pz-cz)² ) < R²
+  return !((pow(this->x() - s.getCenter().x(),2) + pow(this->y() - s.getCenter().y(),2) + pow(this->z() - s.getCenter().z(),2) ) < pow(s.getRadius(),2) ) ;
+}
+template <typename T, int N>
+bool Point<T,N>::is_behind( const Plane &p )
+{
+    float x = *this*p.perpendicularVector() + p.d();
+    return x<0;
+}
+template <typename T, int N>
 T& Point<T,N>::operator[] ( int i)
 {
     return sequence[i];
@@ -313,16 +327,7 @@ Point<T,N> Point<T,N>::operator +( const Point& p)
     }
     return result;
 }
-template <typename T, int N>
-Point<T,N> Point<T,N>::operator-(const Point& p)
-{
-    Point<T,N> result;
-    for ( int i =0 ; i < N ; ++i)
-    {
-        result[i] = this->at(i) - p.at(i);
-    }
-    return result;
-}
+
 template <typename T, int N>
 Point<T,N> Point<T,N>::operator-() const
 {
@@ -332,6 +337,16 @@ Point<T,N> Point<T,N>::operator-() const
         result[i] =  -this->at(i);
     }
     return result;
+}
+template <typename T, int N>
+float Point<T,N>::operator*(const Vec3r& v)
+{
+  float result = 0;
+  for (int i=0; i<3 ; ++i)
+  {
+    result+=this->at(i) * v.at(i);
+  }
+  return result;
 }
 template <typename T, int N>
 Point<T,N>& Point<T,N>::operator +=( const Point&p)
@@ -355,6 +370,14 @@ template <typename T, int N>
 bool Point<T,N>::operator!=( const Point& p) const
 {
     return !(*this==p);
+}
+template <typename T, int N>
+void Point<T,N>::operator=(const Point& p)
+{
+    for ( int i =0 ; i < N ; ++i)
+    {
+        this[0][i] = p.at(i) ;
+    }
 }
 
 #pragma endregion
@@ -382,6 +405,7 @@ Direction<T,N>::Direction(const Vector<T,N>& v)
 template <typename T, int N>
 Direction<T,N>::Direction(const Direction& p)
 {
+    //cout << "Constructeur copie Direction" << endl;
     sequence = new T[N];
     for ( int i=0 ; i<N ; ++i)
     {
@@ -391,6 +415,7 @@ Direction<T,N>::Direction(const Direction& p)
 template <typename T, int N>
 Direction<T,N>::~Direction()
 {
+    //cout << "Destructeur Direction: " << *this << endl;
     delete [] sequence ;
 }
 template <typename T, int N>
@@ -453,5 +478,209 @@ template <typename T, int N>
 bool Direction<T,N>::operator!=( const Direction<T, N> & d) const
 {
     return !(*this==d);
+}
+#pragma endregion
+
+#pragma region Plane
+
+Plane::Plane(const Point<float,4>&p, float)
+{
+    point = *new Point<float,4>(p);
+}
+Plane::~Plane()
+{
+    
+}
+float Plane::d() const
+{
+    return point.w();
+}
+Vec3r Plane::perpendicularVector() const
+{
+    return Vec3r{point.x(),point.y(),point.z()}.to_unit();
+}
+Point<float,4> Plane::originPoint() const
+{
+    return point;
+}
+#pragma endregion
+
+#pragma region LineSegment
+
+LineSegment::LineSegment( const Point<float, 4> &a, const Point<float, 4> &b )
+{
+    d = *new Point<float,4>(a);
+    e = *new Point<float,4>(b);
+    direction = *new Direction<float,4>(e-d);
+}
+LineSegment::LineSegment( const Point<float, 4> &a, const Direction<float, 4> &b )
+{
+    d = *new Point<float,4>(a);
+    direction = *new Direction<float,4>(b);
+    e = *new Point<float,4>(direction - d);
+}
+LineSegment::LineSegment(const LineSegment& ls)
+{
+    d = ls.begin();
+    e = ls.end();
+    direction = ls.dir();
+}
+LineSegment::~LineSegment()
+{
+    //cout << "Destructeur LineSegment" << endl;
+}
+Point<float, 4> LineSegment::begin() const
+{
+    return d;
+}
+Point<float, 4> LineSegment::end() const
+{
+    return e;
+}
+Direction<float, 4> LineSegment::dir() const
+{
+    return direction;
+}
+
+float LineSegment::inter_coef( const Plane &p) const
+{
+    return this->begin()*p.perpendicularVector();// + p.d();
+}
+Point<float, 4> LineSegment::inter( const Plane &p ) const
+{
+    float coef = inter_coef(p);
+    if (coef==0) //parrellele
+    {
+        return Point<float,4>();
+    }
+    Point<float, 4> result;
+    result[1] = p.originPoint().x() / coef;
+    result[2] = p.originPoint().y() / coef;
+    result[3] = p.originPoint().z() / coef;
+    result[0] = p.originPoint().w() / coef;
+    return result;
+}
+#pragma endregion
+
+#pragma region Sphere
+
+Sphere::Sphere( const Point<float,4>& c, float r) // center,radius
+{
+    center = *new Point<float,4>(c);
+    radius = r;
+}
+Sphere::~Sphere()
+{
+    //delete [] center;
+}
+Point<float,4> Sphere::getCenter() const
+{
+    return center;
+}
+float Sphere::getRadius() const
+{
+    return radius;
+}
+#pragma endregion
+
+#pragma region Rectangle
+
+Rectangle::Rectangle()
+{
+    sequence = new Point<float,4>[4];
+}
+Rectangle::Rectangle( const Point<float, 4> &a, const Point<float, 4> &b,const Point<float, 4> &c, const Point<float, 4> &d )
+{
+    sequence = new Point<float,4>[4];
+
+    sequence[0] = *new Point<float,4>(a);
+    sequence[1] = *new Point<float,4>(b);
+    sequence[2] = *new Point<float,4>(c);
+    sequence[3] = *new Point<float,4>(d);
+
+}
+Rectangle::Rectangle ( const Rectangle& r)
+{
+    //cout << "Constructeur copie Rectangle" << endl;
+    sequence = new Point<float,4>[4];
+
+    sequence[0] = r.at(0);
+    sequence[1] = r.at(1);
+    sequence[2] = r.at(2);
+    sequence[3] = r.at(3);
+
+}
+Rectangle::~Rectangle()
+{
+    //cout << "Destructeur Rectangle: " << endl;
+   
+    delete [] sequence;
+    //cout << "Destructeur Rectangle Fin" << endl;
+}
+     
+Point<float,4> Rectangle::at(int i) const
+{
+    return sequence[i];
+}
+#pragma endregion
+
+#pragma region Triangle
+Triangle::Triangle( const Point<float, 4> &a, const Point<float, 4> &b, const Point<float, 4> & c)
+{
+    sequence = new Point<float,4>[3];
+
+    sequence[0] = *new Point<float,4>(a);
+    sequence[1] = *new Point<float,4>(b);
+    sequence[2] = *new Point<float,4>(c);
+}
+Triangle::~Triangle()
+{
+   
+    delete[] sequence;
+}
+Point<float,4> Triangle::p0()
+{
+    return sequence[0];
+}
+Point<float,4> Triangle::p1()
+{
+    return sequence[1];
+}
+Point<float,4> Triangle::p2()
+{
+    return sequence[2];
+}
+
+#pragma endregion
+
+#pragma region XYBBOX
+XYBBox::XYBBox( const Point<float,4> &a, const Point<float,4> &b )
+{
+    sequence = new Point<float,4>[2];
+
+    sequence[0] = *new Point<float,4>(a); // upper left
+    sequence[1] = *new Point<float,4>(b); // lower right
+   
+}
+
+XYBBox::~XYBBox()
+{
+    delete[] sequence;
+}
+float XYBBox::xmax() const
+{
+    return sequence[0].x();
+}
+float XYBBox::ymax() const
+{
+    return sequence[1].y();
+}
+float XYBBox::xmin() const
+{
+    return sequence[1].x();
+}
+float XYBBox::ymin() const
+{
+    return sequence[0].y();
 }
 #pragma endregion

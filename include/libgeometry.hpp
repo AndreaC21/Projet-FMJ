@@ -12,6 +12,11 @@ using namespace libmatrix;
 
 namespace libgeometry {
 
+class Plane;
+template <typename T, int N>
+class Direction;
+class Sphere;
+
 template<typename T>
 class Quaternion
 {
@@ -84,9 +89,9 @@ class Point
      Point(const Point&);
      ~Point();
 
-     //bool is_behind( const Plane & ) const;
-     //Direction length_to( const Point & ) const;
-     //bool is_outside( const Shere & ) const;
+     bool is_behind( const Plane & );
+    // Direction length_to( const Point & ) const;
+     bool is_outside( const Sphere& ) const;
      T x() const;
      T y() const;
      T z() const;
@@ -94,18 +99,39 @@ class Point
      T at(int i) const;
      T& operator[] ( int i);
      Point operator +( const Point&);
-     Point operator-(const Point&);
+     //Point operator-(const Point&);
      Point operator-() const;
+     float operator*(const Vec3r& v);
      Point& operator +=( const Point&);
      bool operator==( const Point<T, N> & ) const;
      bool operator!=( const Point<T, N> & ) const;
+     void operator=(const Point& v);
 
+     friend Direction<T, N> operator-( const Point<T, N> &a, const Point<T, N> &b )
+     {
+          Direction<T,N> result;
+          for ( int i =0 ; i < N ; ++i)
+          {
+               result[i] = b.at(i) - a.at(i);
+          }
+          cout << "r: " << result << endl;
+          return result;
+     }
+     friend Point<T, N> operator-( const Direction<T, N> &a, const Point<T, N> &b )
+     {
+          Point<T,N> result;
+          for ( int i =0 ; i < N ; ++i)
+          {
+               result[i] = a.at(i) - b.at(i);
+          }
+          return result;
+     }
      friend std::ostream &operator<<(std::ostream &os, const Point& p) 
      {
           os << p.w() << " "  << p.x() << " " << p.y() << " " << p.z() << " " << std::endl;
           return os;
      }
-     //Direction<T, N> operator-( const Point<T, N> &);
+     
 };
 template <typename T, int N>
 class Direction
@@ -137,27 +163,139 @@ class Direction
      {
 
      }
+     */
      friend std::ostream &operator<<(std::ostream &os, const Direction& p) 
      {
           os << p.w() << " "  << p.x() << " " << p.y() << " " << p.z() << " " << std::endl;
           return os;
-     }*/
+     }
 };
 class LineSegment
 {
+     private:
+          Point<float,4> d,e;
+          Direction<float,4> direction;
+     public:
      LineSegment( const Point<float, 4> & , const Direction<float, 4> & );
      LineSegment( const Point<float, 4> &, const Point<float, 4> & );
+     LineSegment(const LineSegment& ls);
+     ~LineSegment();
 
      //returns the starting point of the segment.
      Point<float, 4> begin() const;
+     //returns the ending point of the segment.
      Point<float, 4> end() const;
+     //returns the direction of the segment.
      Direction<float, 4> dir() const;
-     //float inter_coef( const Plane &) const;
-    // Point<float, 4> inter( const Plane & ) const;
+     float inter_coef( const Plane &) const;
+     Point<float, 4> inter( const Plane & ) const;
 
      friend std::ostream &operator<<( std::ostream & os, const LineSegment & ls)
      {
+          os << ls.begin() <<"\n" << ls.end() << endl;
+          return os;
+     }
+};
+
+class Plane
+{
+     private:
+          Point<float,4> point;
+     public:
+
+     Plane(const Point<float,4>&, float);
+     Point<float,4> originPoint()const;
+     ~Plane();
+
+     float d() const;
+     Vec3r perpendicularVector() const;
+     friend std::ostream &operator<<( std::ostream & os, const Plane & p)
+     {
           os << std::endl;
+          return os;
+     }
+};
+class Sphere
+{
+     private:
+          Point<float,4> center;
+          float radius;
+     public:
+
+     Sphere(const Point<float,4>& , float); // center,radius
+     ~Sphere();
+     Point<float,4> getCenter() const;
+     float getRadius() const;
+     bool is_behind( const Plane & ) const;
+
+     friend std::ostream &operator<<( std::ostream & os, const Sphere & s)
+     {
+          os << s.getCenter() << " " << s.getRadius() << std::endl;
+          return os;
+     }
+};
+
+class Rectangle
+{
+     private:
+          Point<float,4>* sequence;
+     public:
+
+     Rectangle();
+     Rectangle( const Point<float, 4>& , const Point<float, 4> &,const Point<float, 4> &, const Point<float, 4> & );
+     Rectangle( const Rectangle& );
+     ~Rectangle();
+     Point<float,4> at(int i) const;
+     friend std::ostream &operator<<( std::ostream & os, const Rectangle& r)
+     {
+          os << std::endl;
+          os << r.at(0) << r.at(1) << r.at(2)<< r.at(3) ;
+          return os;
+     }
+};
+class Triangle
+{
+     private:
+         Point<float,4> *sequence;
+     public:
+     Triangle( const Point<float, 4> &, const Point<float, 4> &, const Point<float, 4> & );
+     ~Triangle();
+     float area() const; //aire returns the area of the triangle.
+     Point<float, 4> bary( const Point<float, 4> & ) const;
+     Point<float, 4> center() const;
+     Direction<float, 4> normal() const; //normal vector
+     Point<float, 4> p0();
+     Point<float, 4> p1();
+     Point<float, 4> p2();
+
+     // XYBBOX xybbox() const:
+
+     friend std::ostream &operator<<( std::ostream & os, Triangle & t)
+     {
+          os << std::endl;
+          os << t.p0() << t.p1() << t.p2();
+          return os;
+     }
+};
+
+//Implements a 2D bounding box. That is, a 2D rectangle laying on the x-y plane.
+class XYBBox
+{
+     private:
+          Point<float,4>* sequence;
+     public:
+     //constructs a XYBBox such that the upper left and lower right corners are the points given as arguments.
+     XYBBox( const Point<float,4> &, const Point<float,4> & );
+     ~XYBBox();
+     float xmax() const; //returns the maximum x coordinate.
+     float ymax() const; //returns the maximum y coordinate.
+     float xmin() const; //returns the minimum x coordinate.
+     float ymin() const; //returns the minimum y coordinate.
+
+     friend std::ostream &operator<<( std::ostream & os, const XYBBox & b)
+     {
+          os << std::endl;
+          os << b.xmax() << " ";
           return os;
      }
 };

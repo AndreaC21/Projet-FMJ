@@ -46,13 +46,34 @@ int main()
 
     */
 
-   Point<float,4> p(Vec4r{1,4,5,2});
-   Point<float,4> p2(Vec4r{0,1,-3,2});
-   cout << p << p2 << endl;
+   //Point<float,4> p(Vec4r{1,4,5,2});
+   //Point<float,4> p2(Vec4r{0,1,-3,2});
+   /*cout << p << p2 << endl;
    cout << "-p : "<< -p << endl;
    cout << "p!=p2 : " << std::boolalpha << (p!=p2) << endl;
     p+= p2;
-    cout << "p+=p2 " << p << endl;
+    cout << "p+=p2 " << p << endl;*/
+
+    Point<float,4> a(Vec4r{1,4,5,2});
+    Point<float,4> b(Vec4r{0,1,-3,2});
+    Point<float,4> c(Vec4r{0,5,1,-1});
+    Point<float,4> d(Vec4r{1,8,3,4});
+
+    Rectangle r{a,b,c,d};
+    cout << "r:" << r << endl;
+    Triangle t{a,b,c};
+    cout << "t:" << t <<endl;
+    Sphere s(a,2);
+    cout << "s:\n" << s << endl;
+    cout << "b.is_outside(s): " << std::boolalpha <<b.is_outside(s) << endl;
+    cout << "a.is_outside(s): " << std::boolalpha <<a.is_outside(s) << endl;
+    Plane p(a,2);
+    cout << p << endl;
+    cout << "b.is_behind(p): " << std::boolalpha << b.is_behind(p) << endl;
+    LineSegment ls(a,b);
+    cout << "ls.inter_coef(p): " << ls.inter_coef(p)<< endl;
+    cout << "ls.inter(p): " << ls.inter(p)<< endl;
+
 cout << "finished" << endl;
 return 0;
 }
