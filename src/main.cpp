@@ -63,6 +63,22 @@ int main()
     cout << "r:" << r << endl;
     Triangle t{a,b,c};
     cout << "t:" << t <<endl;
+    cout << "t.area(): " << t.area() << endl;
+    Point<float,4> e(Vec4r{0,1,1,0});
+    Point<float,4> f(Vec4r{0,2,3,0});
+    Point<float,4> g(Vec4r{0,3,1,0});
+    Point<float,4> p(Vec4r{0,2,2,0});
+    Triangle t2{e,f,g};
+    cout << "t2:" << t2 <<endl;
+    cout << "t2.xybbox()" << t2.xybbox() <<endl;
+    cout << "t2.bary({0,2,2,0}): " << t2.bary(p) <<endl;
+    Point<float,4> v0(Vec4r{0,0,0,0});
+    Point<float,4> v1(Vec4r{0,0,-1,0});
+    Point<float,4> v2(Vec4r{0,1,0,0});
+    Triangle t3{v0,v1,v2};
+    cout << "t3:" << t3 <<endl;
+    cout << "t3.normal() : " << t3.normal() <<endl;
+    /*
     Sphere s(a,2);
     cout << "s:\n" << s << endl;
     cout << "b.is_outside(s): " << std::boolalpha <<b.is_outside(s) << endl;
@@ -73,6 +89,8 @@ int main()
     LineSegment ls(a,b);
     cout << "ls.inter_coef(p): " << ls.inter_coef(p)<< endl;
     cout << "ls.inter(p): " << ls.inter(p)<< endl;
+    */
+
 
 cout << "finished" << endl;
 return 0;

@@ -16,6 +16,7 @@ class Plane;
 template <typename T, int N>
 class Direction;
 class Sphere;
+class XYBBox;
 
 template<typename T>
 class Quaternion
@@ -85,6 +86,7 @@ class Point
           T* sequence;
      public:
      Point();
+     Point(const float&, const float&, const float&, const float&);
      Point(const Vector<T,N>&);
      Point(const Point&);
      ~Point();
@@ -114,9 +116,9 @@ class Point
           {
                result[i] = b.at(i) - a.at(i);
           }
-          cout << "r: " << result << endl;
           return result;
      }
+     
      friend Point<T, N> operator-( const Direction<T, N> &a, const Point<T, N> &b )
      {
           Point<T,N> result;
@@ -153,12 +155,20 @@ class Direction
 
      Point<T, N> operator+( const Point<T, N> &);
      Quaternion<T> operator*( const Quaternion<T> & q);
+     float operator*(const Direction& d);
+     Direction operator-(const Direction& d);
      bool operator==( const Direction<T, N> & ) const;
      bool operator!=( const Direction<T, N> & ) const;
-     /*friend Point<T, N> operator+( const Point<T, N> & p, const Direction<T, N> & d)
+     friend Point<T, N> operator+( const Point<T, N> & p, const Direction<T, N> & d)
      {
-
+          Point<T,N> result;
+          for ( int i =0 ; i < N ; ++i)
+          {
+               result[i] = p.at(i) + d.at(i);
+          }
+          return result;
      }
+     /*
      friend Quaternion<T> operator*( const Quaternion<T> & q, const Direction<T, 4> & d)
      {
 
@@ -183,6 +193,7 @@ class LineSegment
 
      //returns the starting point of the segment.
      Point<float, 4> begin() const;
+
      //returns the ending point of the segment.
      Point<float, 4> end() const;
      //returns the direction of the segment.
@@ -230,7 +241,7 @@ class Sphere
 
      friend std::ostream &operator<<( std::ostream & os, const Sphere & s)
      {
-          os << s.getCenter() << " " << s.getRadius() << std::endl;
+          os << s.getCenter() << s.getRadius() << std::endl;
           return os;
      }
 };
@@ -260,15 +271,17 @@ class Triangle
      public:
      Triangle( const Point<float, 4> &, const Point<float, 4> &, const Point<float, 4> & );
      ~Triangle();
-     float area() const; //aire returns the area of the triangle.
+     float cote( Point<float,4> a, Point<float,4>) const ;
+     float area() const; // returns the area of the triangle.
+     float area(const Point<float, 4> &v0,const Point<float, 4> &v1,const Point<float, 4> &v2) const;
      Point<float, 4> bary( const Point<float, 4> & ) const;
      Point<float, 4> center() const;
      Direction<float, 4> normal() const; //normal vector
-     Point<float, 4> p0();
-     Point<float, 4> p1();
-     Point<float, 4> p2();
+     Point<float, 4> p0() const;
+     Point<float, 4> p1() const;
+     Point<float, 4> p2() const;
 
-     // XYBBOX xybbox() const:
+     XYBBox xybbox() const;
 
      friend std::ostream &operator<<( std::ostream & os, Triangle & t)
      {
@@ -295,7 +308,7 @@ class XYBBox
      friend std::ostream &operator<<( std::ostream & os, const XYBBox & b)
      {
           os << std::endl;
-          os << b.xmax() << " ";
+          os << "(" << b.xmin() << ","<< b.ymax() << ") (" << b.xmax() << "," << b.ymin() << ")" << endl;
           return os;
      }
 };

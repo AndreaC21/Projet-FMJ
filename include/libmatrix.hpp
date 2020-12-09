@@ -105,7 +105,6 @@ class Matrix {
         
         bool operator ==(const Matrix m);
         
-        //Matrix& operator*= ();
         //void operator=(const Matrix m);
 
         friend std::ostream &operator<<(std::ostream &os, const Matrix &m) 

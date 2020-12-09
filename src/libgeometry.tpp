@@ -260,6 +260,15 @@ Point<T,N>::Point(const Vector<T,N>& v)
     }
 }
 template <typename T, int N>
+Point<T,N>::Point(const float& w, const float& x, const float& y, const float& z)
+{
+    sequence = new T[N];
+    sequence[0] = w;
+    sequence[1] = x;
+    sequence[2] = y;
+    sequence[3] = z;
+}
+template <typename T, int N>
 Point<T,N>::Point(const Point& p)
 {
     //cout << "Constructeur copie Point" << endl;
@@ -453,6 +462,16 @@ Point<T, N> Direction<T,N>::operator+( const Point<T, N> &)
 { 
  return Point<T,N>();
 }
+template <typename T, int N>
+float Direction<T,N>::operator*(const Direction& d)
+{
+  float result = 0;
+  for (int i=0; i<N ; ++i)
+  {
+    result+=this->at(i) * d.at(i);
+  }
+  return result;
+}
 /*
 template <typename T, int N>
 Quaternion<T> Direction<T,N>::operator*( const Quaternion<T> & q)
@@ -581,6 +600,15 @@ float Sphere::getRadius() const
 {
     return radius;
 }
+
+bool Sphere::is_behind( const Plane &p ) const
+{
+    // distance origin,point p du plan < rayon
+    float distance_centre_origin = sqrt(pow(getCenter().x() - p.originPoint().x(),2) + pow(getCenter().y() - p.originPoint().y(),2) + pow(getCenter().z() - p.originPoint().z(),2));
+
+    //false = pas d'intersection entre la sphere et le plan
+    return distance_centre_origin > radius();
+}
 #pragma endregion
 
 #pragma region Rectangle
@@ -638,22 +666,98 @@ Triangle::~Triangle()
    
     delete[] sequence;
 }
-Point<float,4> Triangle::p0()
+Point<float,4> Triangle::p0() const
 {
     return sequence[0];
 }
-Point<float,4> Triangle::p1()
+Point<float,4> Triangle::p1() const
 {
     return sequence[1];
 }
-Point<float,4> Triangle::p2()
+Point<float,4> Triangle::p2() const
 {
     return sequence[2];
 }
 
+float Triangle::cote( Point<float,4> a, Point<float,4> b) const
+{
+    return sqrt(pow(a.x()-b.x(),2)+pow(a.y()-b.y(),2)+pow(a.z()-b.z(),2));
+}
+
+Point<float, 4> Triangle::bary( const Point<float, 4> &p ) const
+{
+    if (area()==0 ) return Point<float,4>();
+
+    float a_12 = area(p,p1(),p2());
+    float a_20 = area(p,p2(),p0());
+    float a_01 = area(p,p0(),p1());
+    float a = area();
+
+    return Point<float,4>(0,a_12/a,a_20/a,a_01/a);
+
+}
+float Triangle::area() const
+{
+    float a = cote(p0(),p1());
+    float b = cote(p1(),p2());
+    float c = cote(p2(),p0());
+
+     //formule de Heron
+   return sqrt( ((a+b+c)/2) * (((a+b+c)/2)-a)* (((a+b+c)/2)-b) * (((a+b+c)/2)-c) );
+}
+float Triangle::area(const Point<float, 4> &v0,const Point<float, 4> &v1,const Point<float, 4> &v2) const
+{
+    float a = cote(v1,v2);
+    float b = cote(v0,v1);
+    float c = cote(v2,v0);
+     //formule de Heron
+   return sqrt( ((a+b+c)/2) * (((a+b+c)/2)-a)* (((a+b+c)/2)-b) * (((a+b+c)/2)-c) );
+}
+Direction<float, 4> Triangle::normal() const
+{
+    /*
+    n= cross( (v1 -v0),(v2-v0) ) */
+
+    Direction<float, 4> dir_e_01 = p0() - p1();
+    Direction<float, 4> dir_e_02 = p0() - p2();
+    //Direction<float, 4> e_012 = p2() - p1();
+
+    Vector<float,3> e_01{dir_e_01.x(),dir_e_01.y(),dir_e_01.z()};
+    Vector<float,3> e_02{dir_e_02.x(),dir_e_02.y(),dir_e_02.z()};
+    
+    Vector<float,3> d = cross(e_01,e_02);
+    
+    Vector<float,4> result {0,d.at(0),d.at(1),d.at(2)};
+    return Direction<float,4>(result);
+
+    //return dot()
+
+}
+XYBBox Triangle::xybbox() const
+{
+    float min_x = p0().x();
+    if ( p1().x() < min_x ) min_x = p1().x();
+    if ( p2().x() < min_x ) min_x = p2().x();
+
+    float min_y = p0().y();
+    if ( p1().y() < min_y ) min_y = p1().y();
+    if ( p2().y() < min_y ) min_y = p2().y();
+
+    float max_x = p0().x();
+    if ( p1().x() > max_x ) max_x = p1().x();
+    if ( p2().x() > max_x ) max_x = p2().x();
+
+    float max_y = p0().y();
+    if ( p1().y() > max_y ) max_y = p1().y();
+    if ( p2().y() > max_y ) max_y = p2().y();
+
+    return XYBBox(Point<float,4>(0,min_x,max_y,0),Point<float,4>(0,max_x,min_y,0));
+
+}
+
 #pragma endregion
 
-#pragma region XYBBOX
+#pragma region XYBBox
 XYBBox::XYBBox( const Point<float,4> &a, const Point<float,4> &b )
 {
     sequence = new Point<float,4>[2];
