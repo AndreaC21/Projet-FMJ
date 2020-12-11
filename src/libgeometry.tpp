@@ -607,7 +607,7 @@ bool Sphere::is_behind( const Plane &p ) const
     float distance_centre_origin = sqrt(pow(getCenter().x() - p.originPoint().x(),2) + pow(getCenter().y() - p.originPoint().y(),2) + pow(getCenter().z() - p.originPoint().z(),2));
 
     //false = pas d'intersection entre la sphere et le plan
-    return distance_centre_origin > radius();
+    return distance_centre_origin > this->getRadius();
 }
 #pragma endregion
 

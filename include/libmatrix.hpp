@@ -183,7 +183,6 @@ const Vec2r vect2rzero = Vec2r({0.0,0.0});
 const Vec3r vect3rzero = Vec3r({0.0,0.0,0.0});
 const Vec4r vect4rzero = Vec4r({0,0,0,0});
 
-
 // IdentityMat: 
 const Mat33r Identity33r = Mat33r({{1,0,0},{0,1,0},{0,0,1}});
 const Mat44r Identity44r = Mat44r({{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}});

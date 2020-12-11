@@ -6,6 +6,7 @@
 #include <type_traits>
 #include <stdlib.h> // absolute
 #include <cstring> // memcpy
+#include "../include/libmatrix.hpp"
 
 using namespace std;
 using namespace libmatrix;
