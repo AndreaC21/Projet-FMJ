@@ -40,7 +40,7 @@ class Quaternion
     std::string to_string() const;
     Quaternion unit_quat()const;
     Matrix<T, 3, 3> rotation_matrix();
-    Quaternion deg_to_quat( const T & x, const T & y, const T & z);
+    Quaternion deg_to_quat( const T & x, const T & y, const T & z); //TO-DO
     T& operator[]( size_t i );
     T operator[]( size_t i ) const;
     bool operator==( const Quaternion & ) const;
@@ -52,11 +52,8 @@ class Quaternion
     Quaternion operator*(const Quaternion& );
     Quaternion & operator*=( const T& );
     Quaternion & operator*=( const Quaternion& );
-    /*Quaternion operator-() const;
     
-    //Quaternion<T> operator+( const Quaternion<T> &, const Quaternion<T> & );
-    
-    */
+    Quaternion operator-() const; 
 
    friend Quaternion operator*( const T& scalar, Quaternion& q )
    {
@@ -79,6 +76,7 @@ class Quaternion
    }
 
 };
+
 //<w,x,y,z>
 template <typename T, int N>
 class Point
@@ -93,7 +91,7 @@ class Point
      ~Point();
 
      bool is_behind( const Plane & );
-    // Direction length_to( const Point & ) const;
+     Direction<T,N> length_to( const Point & ) const;
      bool is_outside( const Sphere& ) const;
      T x() const;
      T y() const;
@@ -136,6 +134,7 @@ class Point
      }
      
 };
+
 template <typename T, int N>
 class Direction
 {
@@ -155,7 +154,7 @@ class Direction
      T& operator[] ( int i);
 
      Point<T, N> operator+( const Point<T, N> &);
-     Quaternion<T> operator*( const Quaternion<T> & q);
+     Quaternion<T> operator*( const Quaternion<T> & q); // TO DO
      float operator*(const Direction& d);
      Direction operator-(const Direction& d);
      bool operator==( const Direction<T, N> & ) const;
@@ -170,6 +169,7 @@ class Direction
           return result;
      }
      /*
+     TO DO
      friend Quaternion<T> operator*( const Quaternion<T> & q, const Direction<T, 4> & d)
      {
 
@@ -181,6 +181,7 @@ class Direction
           return os;
      }
 };
+
 class LineSegment
 {
      private:
@@ -227,6 +228,7 @@ class Plane
           return os;
      }
 };
+
 class Sphere
 {
      private:
@@ -238,7 +240,7 @@ class Sphere
      ~Sphere();
      Point<float,4> getCenter() const;
      float getRadius() const;
-     bool is_behind( const Plane & ) const;
+     bool is_behind( const Plane & ) const; // TO COMPLETE
 
      friend std::ostream &operator<<( std::ostream & os, const Sphere & s)
      {
@@ -265,6 +267,7 @@ class Rectangle
           return os;
      }
 };
+
 class Triangle
 {
      private:

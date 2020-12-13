@@ -10,14 +10,6 @@ using namespace std;
 int main()
 {
     
-    Quaternion<float> q (4,1,2,3);
-    cout << q << endl;
-    cout << q[0] << endl;
-    cout << q.conjugate() << endl;
-    cout << q.norm() << endl;
-    cout << "re: " << q.re() << " im: " << q.im()<< endl;
-    cout << q.inverse() << endl;
-
     /*
     Quaternion<float> q1 (4,1,2,3);
     Quaternion<float> q2 (4,9,2,-3);
@@ -53,7 +45,7 @@ int main()
    cout << "-p : "<< -p << endl;
    cout << "p!=p2 : " << std::boolalpha << (p!=p2) << endl;
     p+= p2;
-    cout << "p+=p2 " << p << endl;*/
+    cout << "p+=p2 " << p << endl;
 
     Point<float,4> a(Vec4r{1,4,5,2});
     Point<float,4> b(Vec4r{0,1,-3,2});
@@ -79,7 +71,6 @@ int main()
     Triangle t3{v0,v1,v2};
     cout << "t3:" << t3 <<endl;
     cout << "t3.normal() : " << t3.normal() <<endl;
-    /*
     Sphere s(a,2);
     cout << "s:\n" << s << endl;
     cout << "b.is_outside(s): " << std::boolalpha <<b.is_outside(s) << endl;
@@ -91,7 +82,6 @@ int main()
     cout << "ls.inter_coef(p): " << ls.inter_coef(p)<< endl;
     cout << "ls.inter(p): " << ls.inter(p)<< endl;
     */
-
 
 cout << "finished" << endl;
 return 0;

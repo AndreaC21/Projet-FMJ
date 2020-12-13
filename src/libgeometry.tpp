@@ -2,7 +2,6 @@ using namespace libgeometry;
 
 #pragma region Quaternion
 
-
 template<typename T>
 Quaternion<T>::Quaternion()
 {
@@ -165,6 +164,19 @@ bool Quaternion<T>::operator!=( const Quaternion& q ) const
 {
     return !(*this==q);
 }
+
+template<typename T>
+Quaternion<T>  Quaternion<T>::operator-() const
+{
+    Quaternion<T> result;
+    result[0] = this->w();
+    for (int i=1 ; i<4 ; ++i)
+    {
+        result[i] = -sequence[i];
+    }
+    
+    return result;
+}
 template<typename T>
 Quaternion<T> Quaternion<T>::operator+( const T & scalar)
 {
@@ -240,6 +252,7 @@ Quaternion<T>& Quaternion<T>::operator*=( const Quaternion& q )
     return *this;
 }
 # pragma endregion
+
 #pragma region Point
 template <typename T, int N>
 Point<T,N>::Point()
@@ -320,6 +333,16 @@ bool Point<T,N>::is_behind( const Plane &p )
 {
     float x = *this*p.perpendicularVector() + p.d();
     return x<0;
+}
+template <typename T, int N>
+Direction<T,N>  Point<T,N>::length_to( const Point &p ) const
+{
+    Direction<T,N> result;
+    result[0] = 0;
+    result[1] = this->x() - p.x();
+    result[2] = this->y() - p.y();
+    result[3] = this->z() - p.z();
+    return result;
 }
 template <typename T, int N>
 T& Point<T,N>::operator[] ( int i)
@@ -478,11 +501,6 @@ Quaternion<T> Direction<T,N>::operator*( const Quaternion<T> & q)
 {
 
 }
-template <typename T, int N>
-bool Direction<T,N>::operator==( const Direction<T, N> & ) const
-{
-
-}
 */
 template <typename T, int N>
 bool Direction<T,N>::operator==( const Direction<T, N> & d) const
@@ -502,13 +520,13 @@ bool Direction<T,N>::operator!=( const Direction<T, N> & d) const
 
 #pragma region Plane
 
-Plane::Plane(const Point<float,4>&p, float)
+Plane::Plane(const Point<float,4>&p, float f)
 {
     point = *new Point<float,4>(p);
 }
 Plane::~Plane()
 {
-    
+   
 }
 float Plane::d() const
 {

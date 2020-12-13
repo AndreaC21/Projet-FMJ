@@ -31,3 +31,16 @@ src/
 
 test/
 : Test code files.
+
+
+TO DO 
+Quaternion :
+ * Quaternion deg_to_quat( const T & x, const T & y, const T & z); 
+
+Direction :
+ * Quaternion<T> operator*( const Quaternion<T> &, const Direction<T, 4> & )
+ * Quaternion<T> operator*( const Direction<T, 4> &, const Quaternion<T> & )
+
+Sphere :
+ * bool is_behind( const Plane & )
+ 
