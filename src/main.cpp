@@ -9,7 +9,9 @@ using namespace std;
 
 int main()
 {
-    
+    Quaternion<float> q{4,1,2,3};
+    cout << q << endl;
+    cout << q.deg_to_quat(45,45,0) << endl;
     /*
     Quaternion<float> q1 (4,1,2,3);
     Quaternion<float> q2 (4,9,2,-3);

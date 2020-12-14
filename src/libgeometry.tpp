@@ -81,7 +81,8 @@ std::string Quaternion<T>::to_string() const
     std::string s("\n");
     for (int i=0 ; i<4 ; ++i)
     {
-        s+= std::to_string(sequence[i])+" ";
+        //float f = roundf( (sequence[i]* 1000) / 1000) ;
+        s+= std::to_string(this[0][i])+" ";
     }
     return s;
 }
@@ -122,15 +123,29 @@ Quaternion<T> Quaternion<T>::unit_quat()const
 template<typename T>
 Quaternion<T> Quaternion<T>::deg_to_quat( const T & x, const T & y, const T & z)
 {
-    if( x > 360 || x < -360 ) x = x%360;
+    /*if( x > 360 || x < -360 ) x = x%360;
     if( y > 360 || y <-360  ) y = y%360;
-    if( z > 360 || z < -360 ) z = z%360;
+    if( z > 360 || z < -360 ) z = z%360; */
 
-    Quaternion result;
+    Quaternion<T> result;
+    
+    // angle est en radian
+    float rotX,rotY,rotZ,rotW, angle ;
+    rotW = rotX = rotY = rotZ = angle = 0.0f;
+    double pi = 2*acos(0.0);
+    if ( x != 0.0f ) { angle = x * pi / 180.0f ; rotX = sinf(angle / 2); rotW = cosf(angle / 2); }
+    if ( y != 0.0f ) { angle = y * pi / 180.0f ; rotY = sinf(angle / 2); rotW+= cosf(angle / 2); }
+    if ( z != 0.0f ) { angle = z * pi / 180.0f ; rotZ = sinf(angle / 2); rotW+= cosf(angle / 2); }
+
+    result[0] = rotW;
+    result[1] = rotX;
+    result[2] = rotY;
+    result[3] = rotZ;
+    
     return result;
-
 }
-// https://www.andre-gaschler.com/rotationconverter/
+
+// /
 template<typename T>
 Matrix<T,3,3> Quaternion<T>::rotation_matrix()
 {
