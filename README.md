@@ -2,16 +2,15 @@
 
 ## HOW TO COMPILE ##
 
-J'utilise le makefile fourni avec ce dossier ( qui le second que vous anous aviez donnée )
+J'utilise le makefile fourni avec ce dossier ( qui le second que vous nous avez donnée )
 La dernière fois, il y a certainement eu des erreurs car je n'avais pas deg_to_quat, operator*(Quaternion,Vector)
-Normalement cela devrait compilé, c'est bien le cas chez moi )
+Normalement cela devrait compilé( c'est bien le cas chez moi )
 
 Je ne passe pas test_quaternion_n car il doit y avoir un soucis avec mon operateur*(Quaternion,Vector)
 
 J'ai vérifié les resulats de plusieurs des fonctions avec ces sites :
 * https://www.andre-gaschler.com/rotationconverter/
-* https://www.vcalc.com/wiki/vCalc/Quaternion+of+Rotation
-
+* https://www.vcalc.com/wiki/vCalc/Quaternion+Inverse
 
 ## Directory tree explained
 
