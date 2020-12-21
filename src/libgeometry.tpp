@@ -67,6 +67,7 @@ float Quaternion<T>::norm() const
     {
         result+= pow(sequence[i], 2 );
     }
+    
     return result;
 }
 // return |Q|
@@ -92,7 +93,7 @@ Vector<T,3> Quaternion<T>::im() const
     return Vector<T,3>{sequence[1],sequence[2],sequence[3]};
 }
 template<typename T>
-T Quaternion<T>::re()
+T Quaternion<T>::re() const
 {
     return sequence[0];
 }
@@ -102,11 +103,12 @@ Quaternion<T> Quaternion<T>::inverse() const
     // |z|^2 
     Quaternion<T> result;
     float n = norm();
-    result[0] = sequence[0] / n;
-    for (int i=1 ; i<4 ; ++i)
+    result[0] = this->re() / n;
+    for (int i=0 ; i<3 ; ++i)
     {
-        result[i] = -sequence[i] / n;
+        result[i+1] = -this->im()[i] / n;
     }
+   // Quaternion<T> r(this->conjugate() * 1/this->norm());
     return result;
 }
 template<typename T>
@@ -123,10 +125,12 @@ Quaternion<T> Quaternion<T>::unit_quat()const
 template<typename T>
 Quaternion<T> Quaternion<T>::deg_to_quat( const T & x, const T & y, const T & z)
 {
+    return deg_to_quat(x,y,x);
     /*if( x > 360 || x < -360 ) x = x%360;
     if( y > 360 || y <-360  ) y = y%360;
     if( z > 360 || z < -360 ) z = z%360; */
 
+/*
     Quaternion<T> result;
     
     // angle est en radian
@@ -137,20 +141,23 @@ Quaternion<T> Quaternion<T>::deg_to_quat( const T & x, const T & y, const T & z)
     if ( y != 0.0f ) { angle = y * pi / 180.0f ; rotY = sinf(angle / 2); rotW+= cosf(angle / 2); }
     if ( z != 0.0f ) { angle = z * pi / 180.0f ; rotZ = sinf(angle / 2); rotW+= cosf(angle / 2); }
 
+   
     result[0] = rotW;
     result[1] = rotX;
     result[2] = rotY;
     result[3] = rotZ;
     
     return result;
+    */
 }
 
 // /
+
 template<typename T>
-Matrix<T,3,3> Quaternion<T>::rotation_matrix()
+Matrix<T,4,4> Quaternion<T>::rotation_matrix()
 {
     Quaternion copie(this->unit_quat());
-    Matrix<T,3,3> result;
+    Matrix<T,4,4> result;
 
     result[0][0] =  1 - 2* pow(copie[2],2) - 2*pow(copie[3],2);
     result[0][1] =  2*copie[1]*copie[2] - 2*copie[3]*copie[0];
@@ -174,6 +181,15 @@ bool Quaternion<T>::operator==( const Quaternion& q ) const
     }
     return true;
 }
+template<typename T>
+void Quaternion<T>::operator=( const Quaternion& q ) const
+{
+    sequence[0] = q.re();
+    sequence[1] = q.im()[0];
+    sequence[2] = q.im()[1];
+    sequence[3] = q.im()[2];
+}
+
 template<typename T>
 bool Quaternion<T>::operator!=( const Quaternion& q ) const
 {
@@ -242,6 +258,15 @@ Quaternion<T> Quaternion<T>::operator*(const Quaternion& q)
     result[2] = copie[0]*q[2] - copie[1] * q[3] + copie[2] * q[0] + copie[3] * q[1];
     result[3] = copie[0]*q[3] + copie[1] * q[2] - copie[2] * q[1] + copie[3] * q[0];
 
+    return result;
+}
+
+template<typename T>
+Quaternion<T> Quaternion<T>::operator*(const Vector<T,4>& v)
+{
+    Vec3r u {v.at(0),v.at(1),v.at(2)};
+    Vec3r z = cross(this->im(),u);
+    Quaternion result(this->re(), z);
     return result;
 }
 template<typename T>

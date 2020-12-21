@@ -19,6 +19,7 @@ class Direction;
 class Sphere;
 class XYBBox;
 
+//w,x,y,z
 template<typename T>
 class Quaternion
 {
@@ -35,11 +36,11 @@ class Quaternion
     float norm() const; 
     T squared_norm() const;
     Vector<T,3> im() const;
-    T re();
+    T re() const;
     Quaternion inverse() const;
     std::string to_string() const;
     Quaternion unit_quat()const;
-    Matrix<T, 3, 3> rotation_matrix();
+    Matrix<T, 4, 4> rotation_matrix();
     Quaternion deg_to_quat( const T & x, const T & y, const T & z); //TO-DO
     T& operator[]( size_t i );
     T operator[]( size_t i ) const;
@@ -50,8 +51,10 @@ class Quaternion
     Quaternion & operator+=( const Quaternion& );
     Quaternion operator*(const T & );
     Quaternion operator*(const Quaternion& );
+    Quaternion operator*(const Vector<T,4>& v);
     Quaternion & operator*=( const T& );
     Quaternion & operator*=( const Quaternion& );
+    void operator=( const Quaternion& q ) const;
     
     Quaternion operator-() const; 
 
@@ -59,13 +62,17 @@ class Quaternion
    {
         return q*scalar;
    }
+   friend Quaternion operator*( const Vector<T,4>& v, Quaternion& q )
+   {
+        return q*v;
+   }
    friend Quaternion operator+( const T& scalar ,Quaternion& q )
    {
         return q+scalar;
    }
    friend std::ostream &operator<<(std::ostream &os, const Quaternion& q) 
    {
-        os << q.to_string() << std::endl;
+        os << q.re()<< " " << q.im() << std::endl;
         return os;
    }
    friend std::istream operator>>( std::istream &is , const Quaternion<T> & )
@@ -316,6 +323,35 @@ class XYBBox
           return os;
      }
 };
+
+
+using Quatr = Quaternion<float>;
+using real=float;
+const real pi { 3.14159265 };
+
+Quaternion<real> deg_to_quat( const float& x, const float& y, const float& z)
+{
+     Vec3r r{ x * pi / 180.0f /2, y * pi / 180.0f /2,z * pi / 180.0f /2};
+
+     Vec4r a_x{1,1,1,1};
+     Vec4r a_y{1,1,1,1};
+     Vec4r a_z{1,1,1,1};
+
+     if ( r[0]!=0.0f) {a_x = {cosf(r[0]), sinf(r[0]),sinf(r[0]),  cosf(r[0]) }; }
+     if ( r[1]!=0.0f) {a_y = {cosf(r[1]), sinf(r[1]),sinf(r[1]),  cosf(r[1]) }; }
+     if ( r[2]!=0.0f) {a_z = {cosf(r[2]), sinf(r[2]),sinf(r[2]),  cosf(r[2]) }; }
+
+     Vec4r s;
+     s[0] = cosf(r[0]) * cosf(r[1]) *cosf(r[2]); // w
+     if ( !almost_equals(x,0.0f)){ s[1] = a_x.at(1) * a_y.at(1)* a_z.at(1) ;/* x */}
+     if ( !almost_equals(y,0.0f)) s[2] = a_x.at(2) * a_y.at(2)* a_z.at(2); // y
+     if ( !almost_equals(z,0.0f)) s[3] = a_x.at(3) * a_y.at(3)* a_z.at(3);  // z
+
+     Quaternion<real> result(s.at(0),{s.at(1),s.at(2),s.at(3)});
+
+     return result;
+}
+
 
 }
 #include "../src/libgeometry.tpp"

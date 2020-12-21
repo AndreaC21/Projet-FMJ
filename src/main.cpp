@@ -9,9 +9,17 @@ using namespace std;
 
 int main()
 {
-    Quaternion<float> q{4,1,2,3};
+    Quatr q;
+    q = deg_to_quat(90,0,0);
     cout << q << endl;
-    cout << q.deg_to_quat(45,45,0) << endl;
+    //cout << q.rotation_matrix() << endl;
+    cout << q.inverse() << endl;
+    cout << q * q.inverse() << endl;
+    Vec4r curr_pos { 1.0f, 0.0f, 0.0f, 1.0f };
+
+    cout <<  q.inverse() * curr_pos * q << endl;
+
+   
     /*
     Quaternion<float> q1 (4,1,2,3);
     Quaternion<float> q2 (4,9,2,-3);
