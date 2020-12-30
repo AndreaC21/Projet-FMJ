@@ -29,7 +29,7 @@ else ifeq ($(OS), Darwin)
            -I/Library/Frameworks/SDL2_ttf.framework/Headers -F/Library/Frameworks/
     LIBS := -F /Library/Frameworks -framework SDL2 -framework SDL2_ttf
 endif
-CFLAGS = -std=c++11  -Wall -O -Wno-unknown-pragmas $(CDEBUG) $(INC)
+CFLAGS = -std=c++11  -Wall -O -Wno-unknown-pragmas $(CDEBUG) $(INC) $(LIBS)
 LDFLAGS = -g -Wunknown-pragmas
 
 # Find all source files names.

@@ -146,7 +146,17 @@ Vector<T,N> Vector<T,N>::to_unit()
   }
   return result;
 }
-
+template<typename T,int N>
+std::string Vector<T,N>::to_string()
+{
+  std::string result("");
+  float precision = 1000;
+  for ( int i =0; i<N ; ++i)
+  {
+    result+= std::to_string( roundf(this->at(i) * precision) / precision) + " ";
+  }
+  return result;
+}
 template<typename T,int N>
 T& Vector<T,N>::operator[](int i)
 {

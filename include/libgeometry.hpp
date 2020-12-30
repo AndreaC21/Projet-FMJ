@@ -93,7 +93,10 @@ class Point
      public:
      Point();
      Point(const float&, const float&, const float&, const float&);
+     Point(const float&, const float&, const float&);
      Point(const Vector<T,N>&);
+     template <int M>
+     Point<T,N>(const Point<T,M>& p);
      Point(const Point&);
      ~Point();
 
@@ -109,6 +112,7 @@ class Point
      Point operator +( const Point&);
      //Point operator-(const Point&);
      Point operator-() const;
+     Point operator*( const float& scalar);
      float operator*(const Vec3r& v);
      Point& operator +=( const Point&);
      bool operator==( const Point<T, N> & ) const;
@@ -205,6 +209,9 @@ class LineSegment
 
      //returns the ending point of the segment.
      Point<float, 4> end() const;
+
+     Vec2r begin_to_xy() const;
+     Vec2r end_to_xy() const;
      //returns the direction of the segment.
      Direction<float, 4> dir() const;
      float inter_coef( const Plane &) const;
@@ -292,6 +299,10 @@ class Triangle
      Point<float, 4> p1() const;
      Point<float, 4> p2() const;
 
+     LineSegment c0_1() const;
+     LineSegment c1_2() const;
+     LineSegment c0_2() const;
+
      XYBBox xybbox() const;
 
      friend std::ostream &operator<<( std::ostream & os, Triangle & t)
@@ -326,6 +337,7 @@ class XYBBox
 
 
 using Quatr = Quaternion<float>;
+using Point3r = Point<float,3>;
 using real=float;
 const real pi { 3.14159265 };
 

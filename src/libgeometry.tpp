@@ -315,8 +315,19 @@ Point<T,N>::Point(const Vector<T,N>& v)
 template <typename T, int N>
 Point<T,N>::Point(const float& w, const float& x, const float& y, const float& z)
 {
+    //cout << "construct4"<<endl;
     sequence = new T[N];
     sequence[0] = w;
+    sequence[1] = x;
+    sequence[2] = y;
+    sequence[3] = z;
+}
+template <typename T, int N>
+Point<T,N>::Point(const float&x, const float&y, const float&z)
+{
+   // cout << "construct3"<<endl;
+    sequence = new T[4];
+    sequence[0] = 0;
     sequence[1] = x;
     sequence[2] = y;
     sequence[3] = z;
@@ -330,6 +341,38 @@ Point<T,N>::Point(const Point& p)
     {
         sequence[i] = p.at(i);
     }
+}
+
+template <typename T, int N>
+template <int M>
+Point<T,N>::Point(const Point<T,M>& p)
+{
+    sequence = new T[N];
+    if ( M < N) // passer de point3 a point4
+    {
+        if ( M==3)
+        {
+            sequence[0] = 0; //w
+            sequence[1] = p.x();
+            sequence[2] = p.y();
+            sequence[3] = p.z();
+        }
+        else if(M==2)
+        {
+            sequence[0] = 0; //w
+            sequence[1] = p.x();
+            sequence[2] = p.y();
+            sequence[3] = 0;
+        }
+       
+    }
+    else if ( M> N)
+    {
+        sequence[0] = p.x();
+        sequence[1] = p.y();
+        sequence[2] = p.z();
+    }
+    //cout << "Constructeur copie Point" << endl;
 }
 template <typename T, int N>
 Point<T,N>::~Point()
@@ -606,14 +649,12 @@ LineSegment::~LineSegment()
 {
     //cout << "Destructeur LineSegment" << endl;
 }
-Point<float, 4> LineSegment::begin() const
-{
-    return d;
-}
-Point<float, 4> LineSegment::end() const
-{
-    return e;
-}
+Point<float, 4> LineSegment::begin() const{ return d;}
+Point<float, 4> LineSegment::end() const{  return e;}
+
+Vec2r LineSegment::begin_to_xy() const {return Vec2r {this->begin().x(),this->begin().y()};}
+Vec2r LineSegment::end_to_xy() const {return Vec2r {this->end().x(),this->end().y()};}
+
 Direction<float, 4> LineSegment::dir() const
 {
     return direction;
@@ -646,6 +687,7 @@ Sphere::Sphere( const Point<float,4>& c, float r) // center,radius
     center = *new Point<float,4>(c);
     radius = r;
 }
+
 Sphere::~Sphere()
 {
     //delete [] center;
@@ -719,6 +761,7 @@ Triangle::Triangle( const Point<float, 4> &a, const Point<float, 4> &b, const Po
     sequence[1] = *new Point<float,4>(b);
     sequence[2] = *new Point<float,4>(c);
 }
+
 Triangle::~Triangle()
 {
    
@@ -736,7 +779,18 @@ Point<float,4> Triangle::p2() const
 {
     return sequence[2];
 }
-
+LineSegment Triangle::c0_1() const
+{
+    return LineSegment(p0(),p1());
+}
+LineSegment Triangle::c1_2() const
+{
+    return LineSegment(p1(),p2());
+}
+LineSegment Triangle::c0_2() const
+{
+    return LineSegment(p0(),p2());
+}
 float Triangle::cote( Point<float,4> a, Point<float,4> b) const
 {
     return sqrt(pow(a.x()-b.x(),2)+pow(a.y()-b.y(),2)+pow(a.z()-b.z(),2));

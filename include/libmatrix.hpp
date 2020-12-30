@@ -28,6 +28,7 @@ class Vector {
         bool is_unit();
         float norm();
         Vector to_unit(); 
+        std::string to_string();
 
         T& operator[] (int i); //permettre de mofifier la valeur
         Vector operator+(const Vector& v);
