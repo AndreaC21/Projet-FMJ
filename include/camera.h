@@ -9,6 +9,7 @@
 */
 #include "../include/libgeometry.hpp"
 #include "../include/libmatrix.hpp"
+#include "frustum.hpp"
 
 using namespace libmatrix;
 using namespace libgeometry;
@@ -86,7 +87,7 @@ class Camera
         float curr_zoom_speed { 0.0f };
         
         // TODO:
-        //Frustum fov;
+        Frustum fov;
 };
 #include "../src/camera.tpp"
 #endif // _CAMERA_H_

@@ -182,9 +182,11 @@ void Screen::render_line( Vec2r a, Vec2r b, Color c ) const
     SDL_SetRenderDrawColor( this->renderer, sdlc.r, sdlc.g, sdlc.b, sdlc.a );
 
     // Set coordinates.
+    //Vec2i p0{(int) a.at(0),(int) a.at(1)};
+    //Vec2i p1{(int) b.at(0),(int) b.at(1)};
     Vec2i p0 = this->screen_coords( a );
     Vec2i p1 = this->screen_coords( b );
-
+    //cout << p0 << endl;
     // Draw.
     SDL_RenderDrawLine( this->renderer, p0[0], p0[1], p1[0], p1[1] );
 }

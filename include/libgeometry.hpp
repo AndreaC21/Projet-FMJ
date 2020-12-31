@@ -144,6 +144,11 @@ class Point
           return os;
      }
      
+     std::string informations() const
+     {
+          return to_string(this->x())+" "+to_string(this->y())+" "+to_string(this->z())+"\n";
+     }
+     
 };
 
 template <typename T, int N>
@@ -230,6 +235,7 @@ class Plane
           Point<float,4> point;
      public:
 
+     Plane();
      Plane(const Point<float,4>&, float);
      Point<float,4> originPoint()const;
      ~Plane();
@@ -288,6 +294,7 @@ class Triangle
          Point<float,4> *sequence;
      public:
      Triangle( const Point<float, 4> &, const Point<float, 4> &, const Point<float, 4> & );
+     Triangle(const Triangle& t);
      ~Triangle();
      float cote( Point<float,4> a, Point<float,4>) const ;
      float area() const; // returns the area of the triangle.
@@ -302,6 +309,11 @@ class Triangle
      LineSegment c0_1() const;
      LineSegment c1_2() const;
      LineSegment c0_2() const;
+
+     std::string informations() const
+     {
+          return this->p0().informations()+this->p1().informations()+this->p2().informations();
+     }
 
      XYBBox xybbox() const;
 
@@ -337,7 +349,12 @@ class XYBBox
 
 
 using Quatr = Quaternion<float>;
+using Point4r = Point<float,4>;
 using Point3r = Point<float,3>;
+using Point2r = Point<float,2>;
+const Point4r Point4rZero = Point4r(0.0f,0.0f,0.0f,0.0f);
+const Point3r Point3rZero = Point3r(0.0f,0.0f,0.0f);
+
 using real=float;
 const real pi { 3.14159265 };
 

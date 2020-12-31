@@ -1,5 +1,5 @@
-#ifndef _NEARPLANE_H_
-#define _NEARPLANE_H_
+#ifndef _FRUSTUM_H_
+#define _FRUSTUM_H_
 
 #include "../include/libgeometry.hpp"
 #include "../include/libmatrix.hpp"
@@ -32,4 +32,5 @@ class Frustum
 
 };
 
+#include "../src/frustum.tpp"
 #endif

@@ -13,7 +13,7 @@ class Object3D
         // sommet 
         vector<Point3r> vertices;
         // list indice f 1 2 3 -> 1 = sommet1,..
-        vector<Triangle*> faces;
+        vector<Triangle> faces;
 
         float distance(Point3r a, Point3r b) const;
 

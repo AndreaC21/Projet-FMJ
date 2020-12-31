@@ -46,7 +46,7 @@ Sphere Object3D::bsphere() const
 
 Triangle Object3D::face( unsigned int i ) const
 {
-    return *this->faces[i];
+    return this->faces[i];
 }
 
 unsigned int Object3D::num_faces() const
@@ -56,9 +56,9 @@ unsigned int Object3D::num_faces() const
 
 void Object3D::add_face( unsigned int v1, unsigned int v2, unsigned int v3)
 {
-    Point<float,4> a(this->vertices[v1-1]);// dans le fichier vertice 1 fait reference au sommet 0 en memoire donc -1
-    Point<float,4> b(this->vertices[v2-1]);
-    Point<float,4> c(this->vertices[v3-1]);
+    // dans le fichier vertice 1 fait reference au sommet 0 en memoire donc -1
+
+    Triangle t(Point4r(this->vertices[v1-1]),Point4r(this->vertices[v2-1]),Point4r(this->vertices[v3-1]));
     
-    this->faces.push_back( new Triangle(a,b,c));
+    this->faces.push_back(t);
 }

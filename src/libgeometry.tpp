@@ -603,6 +603,10 @@ bool Direction<T,N>::operator!=( const Direction<T, N> & d) const
 
 #pragma region Plane
 
+Plane::Plane()
+{
+    point = Point<float,4>();
+}
 Plane::Plane(const Point<float,4>&p, float f)
 {
     point = *new Point<float,4>(p);
@@ -761,10 +765,15 @@ Triangle::Triangle( const Point<float, 4> &a, const Point<float, 4> &b, const Po
     sequence[1] = *new Point<float,4>(b);
     sequence[2] = *new Point<float,4>(c);
 }
-
+Triangle::Triangle(const Triangle& t)
+{
+    sequence = new Point<float,4>[3];
+    sequence[0] = t.p0();
+    sequence[1] = t.p1();
+    sequence[2] = t.p2();
+}
 Triangle::~Triangle()
 {
-   
     delete[] sequence;
 }
 Point<float,4> Triangle::p0() const

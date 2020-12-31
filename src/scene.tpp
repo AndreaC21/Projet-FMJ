@@ -201,12 +201,14 @@ void Scene::load_obj_file( const char * file_name )
 //! Loads data to the scene.
 void Scene::load_data( int argc, const char * argv[] )
 {
+    // Lecture fichier obj
     for ( int i =1 ; i< argc ; ++i)
     {
         this->load_obj_file(argv[i]);
     }
-    this->draw_object(this->objects[0],0);
-    
+
+    // load_obj_file ajoute directement l'objet crée a list<object3d> de la scene
+   
     // TODO:
     // Calls load_obj_file() to read all files passed on the command line.
     // and add objects to the scene.
@@ -225,7 +227,10 @@ void Scene::draw() const
 {
     // TODO:
     // Draw objects.
-
+    for ( int i=0 ; i < this->objects.size() ; ++i)
+    {
+        this->draw_object(this->objects[i],0);
+    }
     
 
     this->show_cam_params();
@@ -285,18 +290,26 @@ void Scene::show_help() const
 void Scene::draw_object( Object3D * const obj, float * zbuffer ) const
 {
     // TODO:
-
+    //cout << "draw object3d with " << obj->num_faces()<< endl;
     for ( int i=0; i < obj->num_faces() ; ++i)
     {
         this->draw_wire_triangle(obj->face(i));
     }
+   
+    //cout << "end draw" << endl;
 }
 
 //! Draws the wireframe of a triangle.
-void Scene::draw_wire_triangle( const Triangle & t ) const
+void Scene::draw_wire_triangle( const Triangle &t ) const
 {
     // TODO:
-    this->screen->render_line(t.c0_1().begin_to_xy(),t.c0_1().end_to_xy(),white);
+    /*this->screen->render_line(t.c0_1().begin_to_xy(),t.c0_1().end_to_xy(),white);
+    this->screen->render_line(t.c0_2().begin_to_xy(),t.c0_2().end_to_xy(),white);
+    this->screen->render_line(t.c1_2().begin_to_xy(),t.c1_2().end_to_xy(),white);
+    */
+   draw_edge(t.p0(),t.p1());
+   draw_edge(t.p0(),t.p2());
+   draw_edge(t.p1(),t.p1());
 }
 
 //! Draws an edge. (Used for wireframe drawings.)
@@ -305,6 +318,7 @@ void Scene::draw_wire_triangle( const Triangle & t ) const
 void Scene::draw_edge( const Point<float, 4> & v0, const Point<float, 4>& v1 ) const
 {
     // TODO:
+    this->screen->render_line(Vec2r{v0.x(),v0.y()},Vec2r{v1.x(),v1.y()},white);
 }
 
 
