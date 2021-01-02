@@ -9,7 +9,7 @@ using namespace std;
 
 int main()
 {
-    Quatr q;
+   /* Quatr q;
     q = deg_to_quat(90,0,0);
     cout << q << endl;
     //cout << q.rotation_matrix() << endl;
@@ -17,7 +17,16 @@ int main()
     cout << q * q.inverse() << endl;
     Vec4r curr_pos { 1.0f, 0.0f, 0.0f, 1.0f };
 
-    cout <<  q.inverse() * curr_pos * q << endl;
+    cout <<  q.inverse() * curr_pos * q << endl;*/
+    Point<float,4> a(1,4,5,2);
+    Point<float,4> b(0,1,-3,2);
+    Point<float,4> c(0,5,1,-1);
+    Point<float,4> d(1,8,3,4);
+
+    Triangle t{a,b,c};
+    cout << "t:" << t <<endl;
+    cout << "t.area(): " << t.area() << endl;
+    cout << "t.bary({0,2,2,0}): " << t.bary(Point<float,4>{0,2,2,0}) <<endl;
 
    
     /*

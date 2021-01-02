@@ -16,9 +16,10 @@ bool Scene::initialise( int argc, const char * argv[] )
     this->screen->set_title( this->title );
     this->screen->set_width( this->win_width );
     this->screen->set_height( this->win_height );
+
     // TODO: implement this in the camera.
-    //this->camera.set_image_width( this->get_win_width() );
-    //this->camera.set_image_height( this->get_win_height() );
+    this->camera.set_image_width( this->get_win_width() );
+    this->camera.set_image_height( this->get_win_height() );
 
     // Create behaviors.
     this->quit_behavior = new Quit( *this );
@@ -149,22 +150,14 @@ void Scene::generate_output() const
     // Update screen.
     this->screen->update();
 }
-std::vector<string> split(const string& input, const string& regex) {
-    std::regex re(regex);
-    std::sregex_token_iterator
-        first{input.begin(), input.end(), re, -1},
-        last;
-    return {first, last};
-}
+
 void Scene::load_obj_file( const char * file_name )
 {
     ifstream fichier(file_name);
     std::string ligne;
-    std::vector<std::string> line;
 
     std::vector<Point3r> vertices;
     std::vector<Vec3i> faces;
-    int* f = new int[2];
     char t;
     float x,y,z;
     getline(fichier, ligne); // on retire la premiere ligne le nom
@@ -176,11 +169,9 @@ void Scene::load_obj_file( const char * file_name )
         fichier >> z;
         if ( t=='v') 
         {
-            
             Point<float,3> p(x,y,z);
             //cout << p<< endl;
             vertices.push_back(p);
-            
         }
         else if ( t=='f')
         {
@@ -190,10 +181,8 @@ void Scene::load_obj_file( const char * file_name )
         } 
        
     }
-    
     this->objects.push_back(new Object3D(vertices,faces));
     //cout << "fin lecture" << endl;
-    delete [] f;
     fichier.close();
 
 }
@@ -220,6 +209,7 @@ void Scene::load_data( int argc, const char * argv[] )
 void Scene::unload_data()
 {
    // Delete objects from the scene.
+   this->objects.clear();
 }
 
 //! Draws the wireframe of all objects in the frustum.
@@ -232,7 +222,6 @@ void Scene::draw() const
         this->draw_object(this->objects[i],0);
     }
     
-
     this->show_cam_params();
     this->show_fr_params();
 }
@@ -257,9 +246,9 @@ void Scene::stop_left() { this->show_move_left = false; camera.stop_left(); };
 void Scene::show_cam_params() const
 {
     this->screen->render_text( { 10.0f, 10.0f }, "Camera", white );
-    this->screen->render_text( { 10.0f, 25.0f }, "pos : ",white );//+this->camera.get_curr_pos().to_string(), white );
-    this->screen->render_text( { 10.0f, 40.0f }, "ori : ",white );//+this->camera.get_curr_orient().to_string(), white );
-    this->screen->render_text( { 10.0f, 55.0f }, "zoom: ",white );//+std::to_string( this->camera.get_curr_viewer_dist() ), white );
+    this->screen->render_text( { 10.0f, 25.0f }, "pos : "+this->camera.get_curr_pos().to_string(), white );//,white );//
+    this->screen->render_text( { 10.0f, 40.0f }, "ori : "+this->camera.get_curr_orient().to_string(), white );//,white );//
+    this->screen->render_text( { 10.0f, 55.0f }, "zoom: "+ this->camera.get_curr_viewer_dist_to_string() , white );//,white );
 }
 
 //! Renders frustum parameters.
@@ -303,10 +292,6 @@ void Scene::draw_object( Object3D * const obj, float * zbuffer ) const
 void Scene::draw_wire_triangle( const Triangle &t ) const
 {
     // TODO:
-    /*this->screen->render_line(t.c0_1().begin_to_xy(),t.c0_1().end_to_xy(),white);
-    this->screen->render_line(t.c0_2().begin_to_xy(),t.c0_2().end_to_xy(),white);
-    this->screen->render_line(t.c1_2().begin_to_xy(),t.c1_2().end_to_xy(),white);
-    */
    draw_edge(t.p0(),t.p1());
    draw_edge(t.p0(),t.p2());
    draw_edge(t.p1(),t.p1());
@@ -330,6 +315,16 @@ Point<float, 4> Scene::perspective_projection( const Point<float, 4> & p ) const
 {
     // TODO:
 }
+
+unsigned int Scene::get_win_width() const
+{
+    return this->win_width;
+}
+unsigned int Scene::get_win_height () const
+{
+    return this->win_height;
+}
+
 
 // Quit behavior.
 Quit::Quit( Scene & s ) : owner { s } {}

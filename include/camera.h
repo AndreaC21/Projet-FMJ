@@ -67,12 +67,22 @@ class Camera
         bool sees( Triangle & ) const;
         LineSegment visible_part( const LineSegment & ) const;
 
-        void update() {}
+        void update();
+        
+        //SETTER
+        void set_image_width( unsigned int ) ;
+        void set_image_height( unsigned int ) ;
 
         // GETTER 
         Vec4r get_curr_pos() const;
         Quatr get_curr_orient() const;
         float get_curr_viewer_dist() const;
+
+        std::string get_curr_viewer_dist_to_string() const;
+        std::string get_curr_orient_to_string() const;
+        std::string get_curr_pos_to_string() const;
+
+        std::string frnear_to_string() const;
 
     private:
         unsigned int image_width;

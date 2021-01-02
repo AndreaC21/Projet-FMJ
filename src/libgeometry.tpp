@@ -88,6 +88,20 @@ std::string Quaternion<T>::to_string() const
     return s;
 }
 template<typename T>
+std::string Quaternion<T>::to_string_angle() const
+{
+    int precision = 1000;
+
+    Quaternion<T> u = this->unit_quat();
+
+    float x( (int) (u.im().at(0) * precision) / precision);
+    float y(roundf( (u.im().at(1) * precision) / precision));
+    float z(roundf( (u.im().at(2) * precision) / precision));
+    cout << x << endl;
+    return std::to_string(x)+" "+std::to_string(y)+" "+std::to_string(z)+"";
+   
+}
+template<typename T>
 Vector<T,3> Quaternion<T>::im() const
 {
     return Vector<T,3>{sequence[1],sequence[2],sequence[3]};
@@ -235,6 +249,11 @@ Quaternion<T>& Quaternion<T>::operator+=( const Quaternion& q )
         this[0][i]+= q[i];
     }
     return *this;
+}
+template<typename T>
+Quaternion<T>& Quaternion<T>::operator+=( const Vec4r& )
+{
+
 }
 template<typename T>
 Quaternion<T> Quaternion<T>::operator*(const T& scalar )
@@ -404,6 +423,11 @@ template <typename T, int N>
 T Point<T,N>::z() const
 {
     return sequence[3];
+}
+template <typename T, int N>
+std::string Point<T,N>::to_string() const
+{
+    return "x: "+std::to_string(x())+"y: "+std::to_string(y())+"z: "+std::to_string(z())+"w: "+std::to_string(w());
 }
 template <typename T, int N>
 bool Point<T,N>::is_outside( const Sphere& s ) const
@@ -627,6 +651,11 @@ Point<float,4> Plane::originPoint() const
 {
     return point;
 }
+
+std::string Plane::to_string() const
+{
+    return this->point.to_string();
+}
 #pragma endregion
 
 #pragma region LineSegment
@@ -800,11 +829,10 @@ LineSegment Triangle::c0_2() const
 {
     return LineSegment(p0(),p2());
 }
-float Triangle::cote( Point<float,4> a, Point<float,4> b) const
+float Triangle::cote(Point<float,4> a, Point<float,4> b) const
 {
     return sqrt(pow(a.x()-b.x(),2)+pow(a.y()-b.y(),2)+pow(a.z()-b.z(),2));
 }
-
 Point<float, 4> Triangle::bary( const Point<float, 4> &p ) const
 {
     if (area()==0 ) return Point<float,4>();
@@ -823,8 +851,10 @@ float Triangle::area() const
     float b = cote(p1(),p2());
     float c = cote(p2(),p0());
 
+    float p = (a+b+c)/2;
+
      //formule de Heron
-   return sqrt( ((a+b+c)/2) * (((a+b+c)/2)-a)* (((a+b+c)/2)-b) * (((a+b+c)/2)-c) );
+   return sqrt( p* (p-a)* (p-b) * (p-c) );
 }
 float Triangle::area(const Point<float, 4> &v0,const Point<float, 4> &v1,const Point<float, 4> &v2) const
 {

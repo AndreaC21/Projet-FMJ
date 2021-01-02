@@ -54,7 +54,9 @@ class Scene
         // TODO: turn, zoom, ...
 
         void register_behavior( KeyCode key, IBehavior * const behavior );
- 
+
+        unsigned int get_win_width() const;
+        unsigned int get_win_height() const;
         // TODO:
         //void add_object( Object3D * );
 

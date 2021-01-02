@@ -30,6 +30,9 @@ class Frustum
         //and e is the distance between the projection plane and the camera.
         void update( float h, float v, float e );
 
+        // 0->near,1->far,2->right,3->left,4->top,5->bottom
+        Plane getPlane(int) const;
+
 };
 
 #include "../src/frustum.tpp"

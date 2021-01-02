@@ -50,15 +50,41 @@ LineSegment Camera::visible_part( const LineSegment &l ) const
 {
     return LineSegment(l.begin(),l.end());
 }
-Vec4r Camera::get_curr_pos() const
+Vec4r Camera::get_curr_pos() const  {  return this->curr_pos;  }
+Quatr Camera::get_curr_orient() const  { return this->curr_orient; }
+float Camera::get_curr_viewer_dist() const { return this->curr_viewer_dist; }
+
+std::string Camera::get_curr_viewer_dist_to_string() const 
 {
-    return this->curr_pos;
+    float precision = 10;      
+    return to_string((roundf(this->get_curr_viewer_dist() * precision) / precision));
 }
-Quatr Camera::get_curr_orient() const
-{
-    return this->curr_orient;
+std::string Camera::get_curr_orient_to_string() const 
+{    
+    return this->get_curr_orient().to_string_angle();
 }
-float Camera::get_curr_viewer_dist() const
+std::string Camera::get_curr_pos_to_string() const 
+{    
+    return this->get_curr_pos().to_string();
+}
+std::string Camera::frnear_to_string() const
 {
-    return this->curr_viewer_dist;
+    //return this->fov.getPlane(0).to_string();
+    return "";
+}
+void Camera::set_image_width( unsigned int w) 
+{
+    this->image_width = w;
+}
+void Camera::set_image_height( unsigned int h)
+{
+    this->image_height = h;
+}
+
+void Camera::update()
+{
+    this->curr_viewer_dist += this->curr_zoom_speed;
+    //this->curr_pos += this->curr_move_speed;
+    //this->curr_orient += this->curr_turn_speed;
+    
 }

@@ -39,6 +39,7 @@ class Quaternion
     T re() const;
     Quaternion inverse() const;
     std::string to_string() const;
+    std::string to_string_angle() const;
     Quaternion unit_quat()const;
     Matrix<T, 4, 4> rotation_matrix();
     Quaternion deg_to_quat( const T & x, const T & y, const T & z); //TO-DO
@@ -49,6 +50,7 @@ class Quaternion
     Quaternion operator+( const T & );
     Quaternion & operator+=( const T & );
     Quaternion & operator+=( const Quaternion& );
+    Quaternion & operator+=( const Vec4r& );
     Quaternion operator*(const T & );
     Quaternion operator*(const Quaternion& );
     Quaternion operator*(const Vector<T,4>& v);
@@ -108,6 +110,7 @@ class Point
      T z() const;
      T w() const;
      T at(int i) const;
+     std::string to_string() const;
      T& operator[] ( int i);
      Point operator +( const Point&);
      //Point operator-(const Point&);
@@ -146,7 +149,7 @@ class Point
      
      std::string informations() const
      {
-          return to_string(this->x())+" "+to_string(this->y())+" "+to_string(this->z())+"\n";
+          return std::to_string(this->x())+" "+std::to_string(this->y())+" "+std::to_string(this->z())+"\n";
      }
      
 };
@@ -242,6 +245,7 @@ class Plane
 
      float d() const;
      Vec3r perpendicularVector() const;
+     std::string to_string() const;
      friend std::ostream &operator<<( std::ostream & os, const Plane & p)
      {
           os << std::endl;
