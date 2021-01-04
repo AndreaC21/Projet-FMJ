@@ -864,6 +864,10 @@ float Triangle::area(const Point<float, 4> &v0,const Point<float, 4> &v1,const P
      //formule de Heron
    return sqrt( ((a+b+c)/2) * (((a+b+c)/2)-a)* (((a+b+c)/2)-b) * (((a+b+c)/2)-c) );
 }
+Point<float, 4> Triangle::center() const
+{
+    return Point4rZero;
+}
 Direction<float, 4> Triangle::normal() const
 {
     /*

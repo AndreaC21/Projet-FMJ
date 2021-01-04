@@ -2,16 +2,16 @@
 
 ## HOW TO COMPILE ##
 
-J'utilise le makefile fourni avec ce dossier ( qui le second que vous nous avez donnée )
-La dernière fois, il y a certainement eu des erreurs car je n'avais pas deg_to_quat, operator*(Quaternion,Vector)
-Normalement cela devrait compilé( c'est bien le cas chez moi )
+J'ai utilisé VSCode et pour compiler, j'utilise le makefile fourni avec ce dossier ( qui le second que vous nous avez donnée ).
+Je compile avec make et j'execute avec bin/./tdsv  data/tetrahedron1.obj
+J'ai normalement implementé toutes les fonctions demandé ( certaine retournent directement 0 ou true )
+Mon projet n'est pas complet, j'ai mis une image du résulat que j'obtient pour l'instant dans le dossier images.
 
-Je ne passe pas test_quaternion_n car il doit y avoir un soucis avec mon operateur*(Quaternion,Vector)
+## INCLUDE 
 
-J'ai vérifié les resulats de plusieurs des fonctions avec ces sites :
-* https://www.andre-gaschler.com/rotationconverter/
-* https://www.vcalc.com/wiki/vCalc/Quaternion+Inverse
-
+J'ai dans la plupart des fichiers, des include de ce type : 
+* #include "../include/libmatrix.hpp" 
+* #include "../include/libgeometry.hpp"
 ## Directory tree explained
 
 bin/
@@ -43,5 +43,8 @@ src/
 
 test/
 : Test code files.
+
+images/
+: Current result.
 
  

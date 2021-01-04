@@ -17,7 +17,7 @@ int main()
     cout << q * q.inverse() << endl;
     Vec4r curr_pos { 1.0f, 0.0f, 0.0f, 1.0f };
 
-    cout <<  q.inverse() * curr_pos * q << endl;*/
+    cout <<  q.inverse() * curr_pos * q << endl;
     Point<float,4> a(1,4,5,2);
     Point<float,4> b(0,1,-3,2);
     Point<float,4> c(0,5,1,-1);
@@ -27,6 +27,14 @@ int main()
     cout << "t:" << t <<endl;
     cout << "t.area(): " << t.area() << endl;
     cout << "t.bary({0,2,2,0}): " << t.bary(Point<float,4>{0,2,2,0}) <<endl;
+    cout << "t.normal() " << t.normal() << endl;
+
+    Point<float,4> v0(0,0,0,0);
+    Point<float,4> v1(0,0,-1,0);
+    Point<float,4> v2(0,1,0,0);
+    Triangle t3(v0,v1,v2);
+    cout << "t3:" << t3 <<endl;
+    cout << "t3.normal() : " << t3.normal() <<endl;
 
    
     /*
