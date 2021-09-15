@@ -1,12 +1,5 @@
 # THE 3D SCENE VIEWER
 
-## HOW TO COMPILE ##
-
-J'ai utilisé VSCode et pour compiler, j'utilise le makefile fourni avec ce dossier ( qui le second que vous nous avez donnée ).
-Je compile avec make et j'execute avec bin/./tdsv  data/tetrahedron1.obj
-J'ai normalement implementé toutes les fonctions demandé ( certaine retournent directement 0 ou true )
-Mon projet n'est pas complet, j'ai mis une image du résulat que j'obtient pour l'instant dans le dossier images.
-
 ## INCLUDE 
 
 J'ai dans la plupart des fichiers, des include de ce type : 
